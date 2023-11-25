@@ -1,0 +1,1 @@
+{"plot_flag": true, "AI_flag": true, "dimension": 4, "x_size": 1262, "y_size": 640, "my_dpi": 121, "max_ln": 180, "source": "zODworkspace//save", "weights": "zODweights_new//weights4_1_1.pt", "view_img": false, "save_txt": true, "imgsz": true, "trace": 
