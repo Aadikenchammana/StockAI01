@@ -9,6 +9,9 @@ import random
 import pytz
 import calendar
 
+def instancePrint(str):
+    print("zDC:",str)
+
 def avg(a,b):
     return (a+b)/2
 def ma(lst,interval):
@@ -37,7 +40,7 @@ def access_api(msg):
     # Print the response*
     msg = response.json()['response']
     elapsed_time = (time.time() - start_time) * 1000
-    print(f"Task completed in {elapsed_time} milliseconds")
+    instancePrint(f"Task completed in {elapsed_time} milliseconds")
     return msg
 def current_time(timezone):
     time = pytz.timezone(timezone) 
@@ -68,7 +71,7 @@ def DC():
     #-----------------------------------------
     startIndex = 540
     endIndex = 4140#2340
-    print(access_api('access:'+str(startIndex)+":"+str(endIndex)))
+    instancePrint(access_api('access:'+str(startIndex)+":"+str(endIndex)))
     symbols = []
     with open('zDC_text_files//baseline_prices.txt', 'r') as f:
         baseline_prices = json.loads(f.read())
@@ -125,9 +128,8 @@ def DC():
     #B O D Y
     #-----------------------------------------
     while flag:
-        print("hi")
         dt,now,day = current_time("America/New_York")
-        print(dt)
+        instancePrint(dt)
         with open('zODworkspace//prices.txt', 'r') as f:
             prices = json.loads(f.read())
         msg = ""

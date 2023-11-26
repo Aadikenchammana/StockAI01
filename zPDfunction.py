@@ -28,6 +28,8 @@ import glob
 #------------------------------------------------------------------------
 # A I   P R E P 
 #------------------------------------------------------------------------
+def instancePrint(str):
+    print("zDC:",str)
 def clear_jpg_files(directory,typ):
     # Get all jpg files in the directory
     if typ == "jpg":
@@ -39,7 +41,7 @@ def clear_jpg_files(directory,typ):
     for jpg_file in jpg_files:
         if (os.path.exists(jpg_file)):
             os.remove(jpg_file)
-    print("DIRECTORY CLEARED:",directory)
+    instancePrint("DIRECTORY CLEARED:",directory)
 def determine_valid(lstx,lsty,end_x,end_y):
     mn = min(lsty)
     flag = True
@@ -50,32 +52,32 @@ def determine_valid(lstx,lsty,end_x,end_y):
     for i in range(1,len(lstx)):
         if lstx[i] - lstx[i-1] < 6:
             h = 1
-            #print("FALSE: LENGTH 1")
+            #instancePrint("FALSE: LENGTH 1")
             #return False
     if not(left_shoulder > t1 and head > t1 and right_shoulder > t1):
-        #print("FALSE: HEIGHT 1")
+        #instancePrint("FALSE: HEIGHT 1")
         return False
     if not(left_shoulder > t2 and head > t2 and right_shoulder > t2):
-        #print("FALSE: HEIGHT 2")
+        #instancePrint("FALSE: HEIGHT 2")
         return False
     if abs(t1-t2)/diff > 0.4:
-        #print("FALSE: DIFF")
+        #instancePrint("FALSE: DIFF")
         return False
     if not(3 > left_shoulder/right_shoulder > 0.33):
-        #print("FALSE: SHOULDERS 1")
+        #instancePrint("FALSE: SHOULDERS 1")
         return False
     if not(head/right_shoulder > 1 and head/left_shoulder > 1):
-        #print("FALSE: HEAD 1")
+        #instancePrint("FALSE: HEAD 1")
         return False
     if right_shoulder_x  - left_shoulder_x < 30:
-        #print("FALSE: LENGTH 1")
+        #instancePrint("FALSE: LENGTH 1")
         return False
     
     head -= (t1+t2)/2
     left_shoulder -= t1
     right_shoulder -= t2
     if not(5 > left_shoulder/right_shoulder > 0.2):
-        #print("FALSE: SHOULDERS 2")
+        #instancePrint("FALSE: SHOULDERS 2")
         return False
     
     d1 = t1_x - left_shoulder_x
@@ -87,7 +89,7 @@ def determine_valid(lstx,lsty,end_x,end_y):
     coef = 4
 
     if max([d1,d2,d3,d4,d5])/min([d1,d2,d3,d4,d5]) > coef and False:
-        #print("FALSE: D1")
+        #instancePrint("FALSE: D1")
         return False
     
     return True
@@ -101,11 +103,11 @@ def read_json_file(file_path,prices):
                 data = json.load(file)
             return data
         except json.JSONDecodeError:
-            print(f"Attempt {current_attempt}: Failed to read JSON file. Retrying...")
+            instancePrint(f"Attempt {current_attempt}: Failed to read JSON file. Retrying...")
             current_attempt += 1
             time.sleep(0.05)  # Wait for 1 second before retrying
 
-    print("Max attempts reached. Unable to read JSON file.")
+    instancePrint("Max attempts reached. Unable to read JSON file.")
     return prices
 def max_index_find(lst):
     num = lst[0]
@@ -430,7 +432,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    #print("XYXY",xyxy)
+                    #instancePrint("XYXY",xyxy)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
@@ -444,7 +446,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            #print(f'{s}{(1E3 * (t2 - t1)):.1f}')
+            #instancePrint(f'{s}{(1E3 * (t2 - t1)):.1f}')
 
             # Stream results
             if view_img:
@@ -455,7 +457,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
-                    #print(f" The image with the result is saved in: {save_path}")
+                    #instancePrint(f" The image with the result is saved in: {save_path}")
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
                         vid_path = save_path
@@ -610,7 +612,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
 
 
 def PD():
-    print("YURRRR")
+    instancePrint("YURRRR")
     #"""
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='zPD_weights_new/weights4_1_2.pt', help='model.pt path(s)')
@@ -693,9 +695,9 @@ def PD():
 
 
         while True:
-            print("--------------------")
-            print("STARTING NEW ITERATION")
-            print("TIME",time.time()-start_time)
+            instancePrint("--------------------")
+            instancePrint("STARTING NEW ITERATION")
+            instancePrint("TIME",time.time()-start_time)
             start_time = time.time()
             dt,now,day = current_time("America/New_York")
             prev_watchlist = watchlist
@@ -705,9 +707,9 @@ def PD():
             remove = []
             prices = read_json_file('zODworkspace/prices.txt',prices)
             dt_list = prices["dt_list"]
-            print("CURRENT DT:",dt_list[len(dt_list)-1])
+            instancePrint("CURRENT DT:",dt_list[len(dt_list)-1])
             currDt = dt_list[len(dt_list)-1]
-            print("--------------------")
+            instancePrint("--------------------")
             flag = False
             if watchlist != {}:
                 flag = True
@@ -732,7 +734,7 @@ def PD():
                         valid_flag = True
                         start_index = dt_list.index(start)
                         lst = dt_list[start_index:]
-                    #print(dt_list)
+                    #instancePrint(dt_list)
                     if valid_flag and str(start) in dt_list and len(lst) < 150:
                         cleaned_symbols.append(symbol)
                     else:
@@ -844,8 +846,8 @@ def PD():
                                     if key.split(":")[0] != "tempsymbol":
                                         current_keys.append(key)
                                 for key in current_keys:
-                                    print("--------")
-                                    print(key)
+                                    instancePrint("--------")
+                                    instancePrint(key)
                                     result_x = x_dict[key]
                                     result_y = y_dict[key]
                                     result_class = class_dict[key]
@@ -913,7 +915,7 @@ def PD():
                                                     else:
                                                         after_bool = True
                                                     if (end < min(t1,t2)) and after_bool:
-                                                        print("developed")
+                                                        instancePrint("developed")
                                                         y_trend_lst = prices[symbol_name]
                                                         y_trend_lst = y_trend_lst
                                                         dt_list = og_dt_list[-1*max_trend_len:]
@@ -922,7 +924,7 @@ def PD():
                                                             x_trend_lst.append(i)
                                                         trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,x_size,y_size,my_dpi,stride,dimension)
                                                         if trend_flag:
-                                                            print("trend verified")
+                                                            instancePrint("trend verified")
                                                             source_path = "zPDworkspace/current/"+symbol+".jpg"
                                                             if (t1+t2)/2 != 0 and (head - (t1+t2)/2)/((t1+t2)/2) > 0.004:
                                                                 destination_path = "zPDworkspace/found/zregression/"+symbol+"_"+currDt+".jpg"#"zPDworkspace/found/big/"+symbol+"_"+currDt+".jpg"
@@ -947,11 +949,11 @@ def PD():
                                                                     temp_dict["trend"] = [trend_ln,trend_height]
                                                                     json.dump(temp_dict, f)
                                                     else:
-                                                        print("waiting")
+                                                        instancePrint("waiting")
                                                 else:
-                                                    print("False")
+                                                    instancePrint("False")
                                         else:
-                                            print("Not enough points")
+                                            instancePrint("Not enough points")
                             os.remove(file_name)
                             plt.close('all')
                             plt.figure(figsize=(x_size/my_dpi, y_size/my_dpi), dpi=my_dpi)
@@ -1000,7 +1002,7 @@ def PD():
 
             
             if flag:
-                print("TIME TAKEN:",(time.time()-start_time))
+                instancePrint("TIME TAKEN:",(time.time()-start_time))
                 if time.time()-start_time < 16:
                     time.sleep(int(16-(time.time()-start_time)))
             else:

@@ -28,6 +28,8 @@ import glob
 #------------------------------------------------------------------------
 # A I   P R E P 
 #------------------------------------------------------------------------
+def instancePrint(str):
+    print("zDC:",str)
 def clear_jpg_files(directory,typ):
     # Get all jpg files in the directory
     if typ == "jpg":
@@ -39,7 +41,7 @@ def clear_jpg_files(directory,typ):
     for jpg_file in jpg_files:
         if (os.path.exists(jpg_file)):
             os.remove(jpg_file)
-    print("DIRECTORY CLEARED:",directory)
+    instancePrint("DIRECTORY CLEARED:",directory)
 def read_json_file(file_path,prices):
     max_attempts = 10
     current_attempt = 1
@@ -50,11 +52,11 @@ def read_json_file(file_path,prices):
                 data = json.load(file)
             return data
         except json.JSONDecodeError:
-            print(f"Attempt {current_attempt}: Failed to read JSON file. Retrying...")
+            instancePrint(f"Attempt {current_attempt}: Failed to read JSON file. Retrying...")
             current_attempt += 1
             time.sleep(0.05)  # Wait for 1 second before retrying
 
-    print("Max attempts reached. Unable to read JSON file.")
+    instancePrint("Max attempts reached. Unable to read JSON file.")
     return prices
 
 def ma(lst,interval):
@@ -162,7 +164,7 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
                 typ = 16
                 x_dimension = 3
                 y_dimension = 3
-        print (typ)
+        instancePrint (typ)
         lst = current_prices[typ-1]
         symb = current_symbols[typ-1]
 
@@ -195,11 +197,11 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
             if dt_list.index("1") < 130:
                 flag = True
         flag = True
-        print(symb)
-        print(x_center,y_center,height,width)
+        instancePrint(symb)
+        instancePrint(x_center,y_center,height,width)
         if x_center > 0.7 and len(dt_list) - x_min < 200:
             output[symb] = dt_list[x_min-1]
-    print(output)
+    instancePrint(output)
     return output
 
 def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt):
@@ -264,7 +266,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    #print("XYXY",xyxy)
+                    #instancePrint("XYXY",xyxy)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
@@ -278,7 +280,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            print(f'{s}{(1E3 * (t2 - t1)):.1f}')
+            instancePrint(f'{s}{(1E3 * (t2 - t1)):.1f}')
 
             # Stream results
             if view_img:
@@ -289,7 +291,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
-                    #print(f" The image with the result is saved in: {save_path}")
+                    #instancePrint(f" The image with the result is saved in: {save_path}")
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
                         vid_path = save_path
@@ -314,7 +316,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
 def OD():
 
-    print("YURRRR")
+    instancePrint("YURRRR")
     #"""
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='zODweights_new//weights4_1_1.pt', help='model.pt path(s)')
@@ -383,10 +385,10 @@ def OD():
         clear_jpg_files("zODworkspace//results","txt")
         start_time = time.time()
         while True:
-            print("--------------------")
-            print("STARTING NEW ITERATION")
-            print("TIME",time.time()-start_time,time.time(),start_time)
-            print("--------------------")
+            instancePrint("--------------------")
+            instancePrint("STARTING NEW ITERATION")
+            instancePrint("TIME",time.time()-start_time,time.time(),start_time)
+            instancePrint("--------------------")
             start_time = time.time()
             dt,now,day = current_time("America/New_York")
             if plot_flag:
@@ -436,7 +438,7 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        print(name)
+                        instancePrint(name)
                         plt.savefig(file_name, format='jpeg')
                         ttemp = time.time()
                         if AI_flag:
@@ -481,6 +483,6 @@ def OD():
                         current_prices = []
                         ttemp = time.time()
             if time.time()-start_time < 30:
-                print("TIME TAKEN:",(time.time()-start_time))
+                instancePrint("TIME TAKEN:",(time.time()-start_time))
                 time.sleep(int(30-(time.time()-start_time)))
 
