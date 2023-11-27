@@ -29,11 +29,11 @@ import glob
 # A I   P R E P 
 #------------------------------------------------------------------------
 def instancePrint(lst):
-    str = ""
+    string = ""
     for item in lst:
-        str+= " "+str(item)
-    str = str[1:]
-    print("zOD:",str)
+        string+= " "+str(item)
+    string = string[1:]
+    print("zOD:",string)
 def clear_jpg_files(directory,typ):
     # Get all jpg files in the directory
     if typ == "jpg":
