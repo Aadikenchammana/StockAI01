@@ -342,6 +342,7 @@ def OD():
     #------------------------------------------------------------------------
 
     with torch.no_grad():
+        instancePrint("1")
         source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
@@ -354,6 +355,7 @@ def OD():
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
         imgsz = check_img_size(imgsz, s=stride)
+        instancePrint("2")
         if trace:
             model = TracedModel(model, device, opt.img_size)
         if half:
@@ -364,6 +366,7 @@ def OD():
             modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
         names = model.module.names if hasattr(model, 'module') else model.names
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
+        instancePrint("3")
         #-----------------------------------
         #WORKSPACE
         #-----------------------------------
