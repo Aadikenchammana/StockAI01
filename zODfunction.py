@@ -28,7 +28,11 @@ import glob
 #------------------------------------------------------------------------
 # A I   P R E P 
 #------------------------------------------------------------------------
-def instancePrint(str):
+def instancePrint(lst):
+    str = ""
+    for item in lst:
+        str+= " "+str(item)
+    str = str[1:]
     print("zOD:",str)
 def clear_jpg_files(directory,typ):
     # Get all jpg files in the directory
@@ -41,7 +45,7 @@ def clear_jpg_files(directory,typ):
     for jpg_file in jpg_files:
         if (os.path.exists(jpg_file)):
             os.remove(jpg_file)
-    instancePrint("DIRECTORY CLEARED:",directory)
+    instancePrint(["DIRECTORY CLEARED:",directory])
 def read_json_file(file_path,prices):
     max_attempts = 10
     current_attempt = 1
@@ -52,11 +56,11 @@ def read_json_file(file_path,prices):
                 data = json.load(file)
             return data
         except json.JSONDecodeError:
-            instancePrint(f"Attempt {current_attempt}: Failed to read JSON file. Retrying...")
+            instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Retrying..."])
             current_attempt += 1
             time.sleep(0.05)  # Wait for 1 second before retrying
 
-    instancePrint("Max attempts reached. Unable to read JSON file.")
+    instancePrint(["Max attempts reached. Unable to read JSON file."])
     return prices
 
 def ma(lst,interval):
@@ -164,7 +168,7 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
                 typ = 16
                 x_dimension = 3
                 y_dimension = 3
-        instancePrint (typ)
+        instancePrint ([typ])
         lst = current_prices[typ-1]
         symb = current_symbols[typ-1]
 
@@ -197,11 +201,11 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
             if dt_list.index("1") < 130:
                 flag = True
         flag = True
-        instancePrint(symb)
-        instancePrint(x_center,y_center,height,width)
+        instancePrint([symb])
+        instancePrint([x_center,y_center,height,width])
         if x_center > 0.7 and len(dt_list) - x_min < 200:
             output[symb] = dt_list[x_min-1]
-    instancePrint(output)
+    instancePrint([output])
     return output
 
 def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt):
@@ -280,7 +284,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            instancePrint(f'{s}{(1E3 * (t2 - t1)):.1f}')
+            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -316,7 +320,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
 def OD():
 
-    instancePrint("YURRRR")
+    instancePrint(["YURRRR"])
     #"""
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='zODweights_new//weights4_1_1.pt', help='model.pt path(s)')
@@ -342,7 +346,7 @@ def OD():
     #------------------------------------------------------------------------
 
     with torch.no_grad():
-        instancePrint("1")
+        instancePrint(["1"])
         source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
@@ -355,7 +359,7 @@ def OD():
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
         imgsz = check_img_size(imgsz, s=stride)
-        instancePrint("2")
+        instancePrint(["2"])
         if trace:
             model = TracedModel(model, device, opt.img_size)
         if half:
@@ -366,7 +370,7 @@ def OD():
             modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
         names = model.module.names if hasattr(model, 'module') else model.names
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
-        instancePrint("3")
+        instancePrint(["3"])
         #-----------------------------------
         #WORKSPACE
         #-----------------------------------
@@ -388,10 +392,10 @@ def OD():
         clear_jpg_files("zODworkspace//results","txt")
         start_time = time.time()
         while True:
-            instancePrint("--------------------")
-            instancePrint("STARTING NEW ITERATION")
-            instancePrint("TIME",time.time()-start_time,time.time(),start_time)
-            instancePrint("--------------------")
+            instancePrint(["--------------------"])
+            instancePrint(["STARTING NEW ITERATION"])
+            instancePrint(["TIME",time.time()-start_time,time.time(),start_time])
+            instancePrint(["--------------------"])
             start_time = time.time()
             dt,now,day = current_time("America/New_York")
             if plot_flag:
@@ -441,7 +445,7 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        instancePrint(name)
+                        instancePrint([name])
                         plt.savefig(file_name, format='jpeg')
                         ttemp = time.time()
                         if AI_flag:
@@ -486,6 +490,6 @@ def OD():
                         current_prices = []
                         ttemp = time.time()
             if time.time()-start_time < 30:
-                instancePrint("TIME TAKEN:",(time.time()-start_time))
+                instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
 
