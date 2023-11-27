@@ -208,7 +208,7 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
     instancePrint([output])
     return output
 
-def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b,old_img_w):
+def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment):
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -222,16 +222,16 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
             old_img_h = img.shape[2]
             old_img_w = img.shape[3]
             for i in range(3):
-                model(img, augment=opt.augment)[0]
+                model(img, augment=augment)[0]
 
         # Inference
         t1 = time_synchronized()
         with torch.no_grad():   # Calculating gradients would cause a GPU memory leak
-            pred = model(img, augment=opt.augment)[0]
+            pred = model(img, augment=augment)[0]
         t2 = time_synchronized()
 
         # Apply NMS
-        pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
+        pred = non_max_suppression(pred, conf_thres, iou_thres, classes=classes, agnostic=agnostic_nms)
         t3 = time_synchronized()
 
         # Apply Classifier
@@ -273,7 +273,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                     #instancePrint("XYXY",xyxy)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
-                        line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
+                        line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         string = str(int(xyxy[0]))+" "+str(int(xyxy[1]))+" "+str(int(xyxy[2]))+" "+str(int(xyxy[3]))
                         with open(txt_path + '.txt', 'a') as f:
                               #f.write(string+'\n')
@@ -321,7 +321,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 def OD():
 
     instancePrint(["YURRRR"])
-    #"""
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='zODweights_new//weights4_1_1.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default='zODworkspace//save', help='source')  # file/folder, 0 for webcam
@@ -341,28 +341,33 @@ def OD():
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    #opt = parser.parse_args()
-    opt, unknown = parser.parse_known_args()
+    opt = parser.parse_args()
+    print(opt)
+    #"""
 
     #------------------------------------------------------------------------
 
     with torch.no_grad():
         instancePrint(["1"])
-        source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+        #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+        source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
+        conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
+        print(source, weights, view_img, save_txt, imgsz, trace)
+        print(type(source),type(weights))
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
         webcam = False
         save_dir = Path("zODworkspace//results")#Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
         #(save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
         set_logging()
-        device = select_device(opt.device)
+        device = select_device(device)#opt.device)
         half = device.type != 'cpu'
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
         imgsz = check_img_size(imgsz, s=stride)
         instancePrint(["2"])
         if trace:
-            model = TracedModel(model, device, opt.img_size)
+            model = TracedModel(model, device, imgsz)#opt.img_size)
         if half:
             model.half()
         classify = False
@@ -458,7 +463,7 @@ def OD():
                             old_img_w = old_img_h = imgsz
                             old_img_b = 1
                             t0 = time.time()
-                            predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b,old_img_w)
+                            predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment)
                             ttemp = time.time()
                             results = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
                             ttemp = time.time()
@@ -494,3 +499,4 @@ def OD():
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
 
+OD()
