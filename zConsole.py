@@ -6,6 +6,7 @@ from zODfunction import OD
 from zPDfunction import PD
 if __name__ == "__main__":
     # create two processes
+    print("zCONSOLE: CORRECT VERSION")
     p1 = multiprocessing.Process(target=DC)
     p2 = multiprocessing.Process(target=OD)
     p3 = multiprocessing.Process(target=PD)
