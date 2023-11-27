@@ -384,7 +384,7 @@ def add_to_dct_lst(dct,ky,val):
         dct[ky] = dct[ky] + [val]
     return dct
 
-def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment):
+def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment):
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -481,7 +481,7 @@ def combine(lst):
     for item in lst:
         output += item
     return output
-def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,trend_ln,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,x_size,y_size,my_dpi,stride,dimension):
+def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,trend_ln,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project,x_size,y_size,my_dpi,stride,dimension,exist_ok,augment):
     #return True
     points_x = [item + trend_ln - detection_ln for item in points_x]
     usx = [item + trend_ln - detection_ln for item in usx]
@@ -542,7 +542,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     old_img_w = old_img_h = imgsz
     old_img_b = 1
     t0 = time.time()
-    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment)
+    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
     #quit()
     name = ""
     for tsymbol in current_symbols:
@@ -823,7 +823,7 @@ def PD():
                                 old_img_w = old_img_h = imgsz
                                 old_img_b = 1
                                 t0 = time.time()
-                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment)
+                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                                 #quit()
                             if True:
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
@@ -908,7 +908,7 @@ def PD():
                                                         x_trend_lst = []
                                                         for i in range(len(y_trend_lst)):
                                                             x_trend_lst.append(i)
-                                                        trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,x_size,y_size,my_dpi,stride,dimension)
+                                                        trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project,x_size,y_size,my_dpi,stride,dimension,exist_ok,augment)
                                                         if trend_flag:
                                                             instancePrint(["trend verified"])
                                                             source_path = "zPDworkspace/current/"+symbol+".jpg"
