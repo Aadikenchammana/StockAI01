@@ -384,7 +384,7 @@ def add_to_dct_lst(dct,ky,val):
         dct[ky] = dct[ky] + [val]
     return dct
 
-def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt):
+def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b):
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -542,7 +542,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     old_img_w = old_img_h = imgsz
     old_img_b = 1
     t0 = time.time()
-    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt)
+    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b)
     #quit()
     name = ""
     for tsymbol in current_symbols:
@@ -841,7 +841,7 @@ def PD():
                                 old_img_w = old_img_h = imgsz
                                 old_img_b = 1
                                 t0 = time.time()
-                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt)
+                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b)
                                 #quit()
                             if True:
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
