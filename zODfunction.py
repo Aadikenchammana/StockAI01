@@ -325,16 +325,14 @@ def OD():
 
     with torch.no_grad():
         instancePrint(["1"])
-        #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
         conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
         print(source, weights, view_img, save_txt, imgsz, trace)
         print(type(source),type(weights))
-        save_img = True#not opt.nosave and not source.endswith('.txt')
+        save_img = True
         save_txt = True
         webcam = False
-        save_dir = Path("zODworkspace//results")#Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
-        #(save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
+        save_dir = Path("zODworkspace//results")
         set_logging()
         device = select_device(device)#opt.device)
         half = device.type != 'cpu'

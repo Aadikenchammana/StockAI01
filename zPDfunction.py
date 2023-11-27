@@ -384,7 +384,7 @@ def add_to_dct_lst(dct,ky,val):
         dct[ky] = dct[ky] + [val]
     return dct
 
-def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b,old_img_w):
+def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment):
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -542,7 +542,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     old_img_w = old_img_h = imgsz
     old_img_b = 1
     t0 = time.time()
-    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b,old_img_w)
+    predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment)
     #quit()
     name = ""
     for tsymbol in current_symbols:
@@ -617,30 +617,11 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
 
 def PD():
     instancePrint(["YURRRR"])
-    #"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='zPD_weights_new/weights4_1_2.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='zPDworkspace/save', help='source')  # file/folder, 0 for webcam
-    parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
-    parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
-    parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-    parser.add_argument('--view-img', action='store_true', help='display results')
-    parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
-    parser.add_argument('--save-conf', action='store_true', help='save confidences in --save-txt labels')
-    parser.add_argument('--nosave', action='store_true', help='do not save images/videos')
-    parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
-    parser.add_argument('--agnostic-nms', action='store_true', help='class-agnostic NMS')
-    parser.add_argument('--augment', action='store_true', help='augmented inference')
-    parser.add_argument('--update', action='store_true', help='update all models')
-    parser.add_argument('--project', default='runs/detect', help='save results to project/name')
-    parser.add_argument('--name', default='exp', help='save results to project/name')
-    parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
-    parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    #opt = parser.parse_args()
-    opt, unknown = parser.parse_known_args()
     with torch.no_grad():
-        source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+        source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
+        conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
+        print(source, weights, view_img, save_txt, imgsz, trace)
+        print(type(source),type(weights))
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
         webcam = False
@@ -842,7 +823,7 @@ def PD():
                                 old_img_w = old_img_h = imgsz
                                 old_img_b = 1
                                 t0 = time.time()
-                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,opt,old_img_b,old_img_w)
+                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,augment)
                                 #quit()
                             if True:
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
