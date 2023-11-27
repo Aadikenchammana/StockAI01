@@ -993,3 +993,5 @@ def PD():
                     time.sleep(int(16-(time.time()-start_time)))
             else:
                 time.sleep(20)
+
+PD()

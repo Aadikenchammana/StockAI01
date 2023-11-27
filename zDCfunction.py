@@ -162,3 +162,5 @@ def DC():
         with open('zODworkspace//prices.txt', 'w') as f:
                 json.dump(prices, f)
         time.sleep(2)
+
+DC()
