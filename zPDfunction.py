@@ -637,7 +637,8 @@ def PD():
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    opt = parser.parse_args()
+    #opt = parser.parse_args()
+    opt, unknown = parser.parse_known_args()
     with torch.no_grad():
         source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         save_img = True#not opt.nosave and not source.endswith('.txt')

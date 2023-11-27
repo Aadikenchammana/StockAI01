@@ -1,6 +1,5 @@
 import multiprocessing
 import time
-from zODfunction import OD
 
 def script1():
   while True:

@@ -341,7 +341,8 @@ def OD():
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    opt = parser.parse_args()
+    #opt = parser.parse_args()
+    opt, unknown = parser.parse_known_args()
 
     #------------------------------------------------------------------------
 
