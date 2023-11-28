@@ -329,7 +329,7 @@ def OD():
         conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
         print(source, weights, view_img, save_txt, imgsz, trace)
         print(type(source),type(weights))
-        save_img = True
+        save_img = False#True
         save_txt = True
         webcam = False
         save_dir = Path("zODworkspace//results")
@@ -401,23 +401,11 @@ def OD():
                     y = prices[symbol]
                     y = y[-max_ln:]
                     y = ma(y,10)
-                    x = []
-                    for i in range(len(y)):
-                        x.append(i)
                     current_symbols.append(symbol)
                     current_prices.append(y)
                     plt.subplot(dimension,dimension,iteration)
-                    plt.plot(x,y,label=str(symbol),antialiased=False)
-                    plt.gca().spines['top'].set_visible(False)
-                    plt.gca().spines['bottom'].set_visible(False) 
-                    plt.gca().spines['left'].set_visible(False)
-                    plt.gca().spines['right'].set_visible(False)
-                    plt.gca().set_xlabel('')
-                    plt.gca().set_ylabel('')
-                    plt.gca().set_xticks([])
-                    plt.gca().set_yticks([])
+                    plt.plot(y,label=str(symbol),antialiased=False)
                     print("PLOT TIME",time.time()-ttemp)
-                    
                     if iteration == dimension**2:
                         ttemp = time.time()
                         name = ""
@@ -429,6 +417,14 @@ def OD():
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
                         instancePrint([name])
+                        plt.gca().spines['top'].set_visible(False)
+                        plt.gca().spines['bottom'].set_visible(False) 
+                        plt.gca().spines['left'].set_visible(False)
+                        plt.gca().spines['right'].set_visible(False)
+                        plt.gca().set_xlabel('')
+                        plt.gca().set_ylabel('')
+                        plt.gca().set_xticks([])
+                        plt.gca().set_yticks([])
                         plt.savefig(file_name, format='jpeg')
                         print("SAVE TIME",time.time()-ttemp)
                         ttemp = time.time()
@@ -480,3 +476,5 @@ def OD():
             if time.time()-start_time < 30:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
+
+OD()
