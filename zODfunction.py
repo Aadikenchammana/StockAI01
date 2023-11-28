@@ -334,7 +334,9 @@ def OD():
         webcam = False
         save_dir = Path("zODworkspace//results")
         set_logging()
-        device = select_device(device)#opt.device)
+        total_device = select_device("")
+        device = total_device#select_device(device)#opt.device)
+        print(device)
         half = device.type != 'cpu'
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
@@ -414,6 +416,7 @@ def OD():
                     plt.gca().set_ylabel('')
                     plt.gca().set_xticks([])
                     plt.gca().set_yticks([])
+                    print("PLOT TIME",time.time()-ttemp)
                     
                     if iteration == dimension**2:
                         ttemp = time.time()
@@ -427,6 +430,7 @@ def OD():
                         file_name = "zODworkspace//save//"+name+".jpg"
                         instancePrint([name])
                         plt.savefig(file_name, format='jpeg')
+                        print("SAVE TIME",time.time()-ttemp)
                         ttemp = time.time()
                         if AI_flag:
                             #data
@@ -437,9 +441,12 @@ def OD():
                             old_img_w = old_img_h = imgsz
                             old_img_b = 1
                             t0 = time.time()
+        
                             predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                             ttemp = time.time()
+                            print("PREDICTION TIME",ttemp-t0)
                             results = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
+                            print("EXTRACTION TIME",time.time()-ttemp)
                             ttemp = time.time()
                             with open('zODworkspace//watchlist.txt', 'r') as f:
                                 watchlist = json.loads(f.read())
@@ -460,6 +467,7 @@ def OD():
                                 json.dump(watchlist, f)
                             with open('zODworkspace//total_watchlist.txt', 'w') as f:
                                 json.dump(total_watchlist, f)
+                            print("FINAL TIME",time.time()-ttemp)
                             ttemp = time.time()
                         os.remove(file_name)
                         plt.close('all')
@@ -472,4 +480,3 @@ def OD():
             if time.time()-start_time < 30:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
-OD()
