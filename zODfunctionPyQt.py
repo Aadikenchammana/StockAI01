@@ -385,11 +385,14 @@ def OD():
             model = TracedModel(model, device, imgsz)#opt.img_size)
         if half:
             model.half()
+        print("t1")
         classify = False
         if classify:
             modelc = load_classifier(name='resnet101', n=2)
             modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
+        print("t2")
         names = model.module.names if hasattr(model, 'module') else model.names
+        print("t3")
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
         instancePrint(["3"])
 
