@@ -364,18 +364,18 @@ def OD():
 
     with torch.no_grad():
         instancePrint(["1"])
-        #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
         conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
         print(source, weights, view_img, save_txt, imgsz, trace)
         print(type(source),type(weights))
-        save_img = True#not opt.nosave and not source.endswith('.txt')
+        save_img = False#True
         save_txt = True
         webcam = False
-        save_dir = Path("zODworkspace//results")#Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
-        #(save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
+        save_dir = Path("zODworkspace//results")
         set_logging()
-        device = select_device(device)#opt.device)
+        total_device = select_device("")
+        device = total_device#select_device(device)#opt.device)
+        print(device)
         half = device.type != 'cpu'
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
@@ -385,14 +385,11 @@ def OD():
             model = TracedModel(model, device, imgsz)#opt.img_size)
         if half:
             model.half()
-        print("t1")
         classify = False
         if classify:
             modelc = load_classifier(name='resnet101', n=2)
             modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
-        print("t2")
         names = model.module.names if hasattr(model, 'module') else model.names
-        print("t3")
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
         instancePrint(["3"])
 
