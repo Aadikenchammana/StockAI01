@@ -367,7 +367,8 @@ class TracedModel(nn.Module):
         
         rand_example = torch.rand(1, 3, img_size, img_size)
         print("t9")
-        
+        print(rand_example)
+        print(self.model)
         traced_script_module = torch.jit.trace(self.model, rand_example, strict=False)
         print("t10")
         #traced_script_module = torch.jit.script(self.model)
