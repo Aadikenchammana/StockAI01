@@ -347,19 +347,29 @@ class TracedModel(nn.Module):
         
         print(" Convert model to Traced-model... ") 
         self.stride = model.stride
+        print("t1")
         self.names = model.names
+        print("t2")
         self.model = model
+        print("t3")
 
         self.model = revert_sync_batchnorm(self.model)
+        print("t4")
         self.model.to('cpu')
+        print("t5")
         self.model.eval()
+        print("t6")
 
         self.detect_layer = self.model.model[-1]
+        print("t7")
         self.model.traced = True
+        print("t8")
         
         rand_example = torch.rand(1, 3, img_size, img_size)
+        print("t9")
         
         traced_script_module = torch.jit.trace(self.model, rand_example, strict=False)
+        print("t10")
         #traced_script_module = torch.jit.script(self.model)
         traced_script_module.save("traced_model.pt")
         print(" traced_script_module saved! ")
