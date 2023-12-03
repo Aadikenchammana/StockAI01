@@ -12,14 +12,16 @@ import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
 import matplotlib.pyplot as plt
-import numpy as np
-
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
+import numpy as np
 from PyQt5 import QtWidgets
+import pyqtgraph as pg
 import pyqtgraph.exporters
 from pyqtgraph.Qt import QtCore, QtGui
 from pyqtgraph import GraphicsLayoutWidget
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 
 from models.experimental import attempt_load
@@ -90,6 +92,7 @@ def ma(lst,interval):
     return output
 
 def current_time(timezone):
+    
     time = pytz.timezone(timezone) 
     time = datetime.now(time)
     
@@ -322,33 +325,6 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                             save_path += '.mp4'
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer.write(im0)
-def saveImage(current_prices, name, win,trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10, trace11, trace12, trace13, trace14, trace15, trace16):
-    exporter = pg.exporters.ImageExporter(win.ci)
-    exporter.parameters()['width'] = 800
-    #exporter.parameters()['height'] = 800
-    currPrices = current_prices
-    t = time.time()
-    trace1.setData(currPrices[0])
-    trace2.setData(currPrices[1])
-    trace3.setData(currPrices[2])
-    trace4.setData(currPrices[3])
-    trace5.setData(currPrices[4])
-    trace6.setData(currPrices[5])
-    trace7.setData(currPrices[6])
-    trace8.setData(currPrices[7])
-    trace9.setData(currPrices[8])
-    trace10.setData(currPrices[9])
-    trace11.setData(currPrices[10])
-    trace12.setData(currPrices[11])
-    trace13.setData(currPrices[12])
-    trace14.setData(currPrices[13])
-    trace15.setData(currPrices[14])
-    trace16.setData(currPrices[15])
-    print(time.time() - t)
-    t = time.time()
-    exporter.export(name)
-    print("sub", time.time() - t)
-    QtCore.QCoreApplication.quit()
 
 
 
@@ -364,18 +340,18 @@ def OD():
 
     with torch.no_grad():
         instancePrint(["1"])
+        #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
         conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
         print(source, weights, view_img, save_txt, imgsz, trace)
         print(type(source),type(weights))
-        save_img = False#True
+        save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
         webcam = False
-        save_dir = Path("zODworkspace//results")
+        save_dir = Path("zODworkspace//results")#Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
+        #(save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
         set_logging()
-        total_device = select_device("")
-        device = total_device#select_device(device)#opt.device)
-        print(device)
+        device = select_device(device)#opt.device)
         half = device.type != 'cpu'
         model = attempt_load(weights, map_location=device)
         stride = int(model.stride.max())
@@ -393,116 +369,55 @@ def OD():
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
         instancePrint(["3"])
 
-        app = QtWidgets.QApplication([])
-        win = pg.GraphicsLayoutWidget()
-        win.setWindowTitle('Test pyqtgraph export')
-        win.setBackground('w') 
-        pen = pg.mkPen(color=(26, 123, 184),width = 3)
-        win.resize(600, 600)
-        ln = 180
-        # PLOT 1
-        plot1 = win.addPlot(row=0, col=0)
-        trace1 = plot1.plot(np.random.random(ln),pen=pen)
-        plot1.enableAutoRange(pg.ViewBox.XYAxes)
-        plot1.getAxis('bottom').setVisible(False)
-        plot1.getAxis('left').setVisible(False)
-        # PLOT 2
-        plot2 = win.addPlot(row=0, col=1)
-        trace2 = plot2.plot(np.random.random(ln),pen=pen)
-        plot2.enableAutoRange(pg.ViewBox.XYAxes)
-        plot2.getAxis('bottom').setVisible(False)
-        plot2.getAxis('left').setVisible(False)
-        # PLOT 3
-        plot3 = win.addPlot(row=0, col=2)
-        trace3 = plot3.plot(np.random.random(ln),pen=pen)
-        plot3.enableAutoRange(pg.ViewBox.XYAxes)
-        plot3.getAxis('bottom').setVisible(False)
-        plot3.getAxis('left').setVisible(False)
-        # PLOT 4
-        plot4 = win.addPlot(row=0, col=3)
-        trace4 = plot4.plot(np.random.random(ln),pen=pen)
-        plot4.enableAutoRange(pg.ViewBox.XYAxes)
-        plot4.getAxis('bottom').setVisible(False)
-        plot4.getAxis('left').setVisible(False)
-        # PLOT 5
-        plot5 = win.addPlot(row=1, col=0)
-        trace5 = plot5.plot(np.random.random(ln),pen=pen)
-        plot5.enableAutoRange(pg.ViewBox.XYAxes)
-        plot5.getAxis('bottom').setVisible(False)
-        plot5.getAxis('left').setVisible(False)
-        # PLOT 6
-        plot6 = win.addPlot(row=1, col=1)
-        trace6 = plot6.plot(np.random.random(ln),pen=pen)
-        plot6.enableAutoRange(pg.ViewBox.XYAxes)
-        plot6.getAxis('bottom').setVisible(False)
-        plot6.getAxis('left').setVisible(False)
-        # PLOT 7
-        plot7 = win.addPlot(row=1, col=2)
-        trace7 = plot7.plot(np.random.random(ln),pen=pen)
-        plot7.enableAutoRange(pg.ViewBox.XYAxes)
-        plot7.getAxis('bottom').setVisible(False)
-        plot7.getAxis('left').setVisible(False)
-        # PLOT 8
-        plot8 = win.addPlot(row=1, col=3)
-        trace8 = plot8.plot(np.random.random(ln),pen=pen)
-        plot8.enableAutoRange(pg.ViewBox.XYAxes)
-        plot8.getAxis('bottom').setVisible(False)
-        plot8.getAxis('left').setVisible(False)
-        # PLOT 9
-        plot9 = win.addPlot(row=2, col=0)
-        trace9 = plot9.plot(np.random.random(ln),pen=pen)
-        plot9.enableAutoRange(pg.ViewBox.XYAxes)
-        plot9.getAxis('bottom').setVisible(False)
-        plot9.getAxis('left').setVisible(False)
-        # PLOT 10
-        plot10 = win.addPlot(row=2, col=1)
-        trace10 = plot10.plot(np.random.random(ln),pen=pen)
-        plot10.enableAutoRange(pg.ViewBox.XYAxes)
-        plot10.getAxis('bottom').setVisible(False)
-        plot10.getAxis('left').setVisible(False)
-        # PLOT 11
-        plot11 = win.addPlot(row=2, col=2)
-        trace11 = plot11.plot(np.random.random(ln),pen=pen)
-        plot11.enableAutoRange(pg.ViewBox.XYAxes)
-        plot11.getAxis('bottom').setVisible(False)
-        plot11.getAxis('left').setVisible(False)
-        # PLOT 12
-        plot12 = win.addPlot(row=2, col=3)
-        trace12 = plot12.plot(np.random.random(ln),pen=pen)
-        plot12.enableAutoRange(pg.ViewBox.XYAxes)
-        plot12.getAxis('bottom').setVisible(False)
-        plot12.getAxis('left').setVisible(False)
-        # PLOT 13
-        plot13 = win.addPlot(row=3, col=0)
-        trace13 = plot13.plot(np.random.random(ln),pen=pen)
-        plot13.enableAutoRange(pg.ViewBox.XYAxes)
-        plot13.getAxis('bottom').setVisible(False)
-        plot13.getAxis('left').setVisible(False)
-        # PLOT 14
-        plot14 = win.addPlot(row=3, col=1)
-        trace14 = plot14.plot(np.random.random(ln),pen=pen)
-        plot14.enableAutoRange(pg.ViewBox.XYAxes)
-        plot14.getAxis('bottom').setVisible(False)
-        plot14.getAxis('left').setVisible(False)
-        # PLOT 15
-        plot15 = win.addPlot(row=3, col=2)
-        trace15 = plot15.plot(np.random.random(ln),pen=pen)
-        plot15.enableAutoRange(pg.ViewBox.XYAxes)
-        plot15.getAxis('bottom').setVisible(False)
-        plot15.getAxis('left').setVisible(False)
-        # PLOT 16
-        plot16 = win.addPlot(row=3, col=3)
-        trace16 = plot16.plot(np.random.random(ln),pen=pen)
-        plot16.enableAutoRange(pg.ViewBox.XYAxes)
-        plot16.getAxis('bottom').setVisible(False)
-        plot16.getAxis('left').setVisible(False)
+        x = []
+    y = []
+    for i in range(180):
+        x.append(i)
+        y.append(i)
+        l1 = go.Scatter(x=x, y=y, name="1",marker_color='rgb(26, 123, 184)')
+        l2 = go.Scatter(x=x, y=y, name="2",marker_color='rgb(26, 123, 184)')
+        l3 = go.Scatter(x=x, y=y, name="3",marker_color='rgb(26, 123, 184)')
+        l4 = go.Scatter(x=x, y=y, name="4",marker_color='rgb(26, 123, 184)')
+        l5 = go.Scatter(x=x, y=y, name="5",marker_color='rgb(26, 123, 184)')
+        l6 = go.Scatter(x=x, y=y, name="6",marker_color='rgb(26, 123, 184)')
+        l7 = go.Scatter(x=x, y=y, name="7",marker_color='rgb(26, 123, 184)')
+        l8 = go.Scatter(x=x, y=y, name="8",marker_color='rgb(26, 123, 184)')
+        l9 = go.Scatter(x=x, y=y, name="9",marker_color='rgb(26, 123, 184)')
+        l10 = go.Scatter(x=x, y=y, name="10",marker_color='rgb(26, 123, 184)')
+        l11 = go.Scatter(x=x, y=y, name="11",marker_color='rgb(26, 123, 184)')
+        l12 = go.Scatter(x=x, y=y, name="12",marker_color='rgb(26, 123, 184)')
+        l13 = go.Scatter(x=x, y=y, name="13",marker_color='rgb(26, 123, 184)')
+        l14 = go.Scatter(x=x, y=y, name="14",marker_color='rgb(26, 123, 184)')
+        l15 = go.Scatter(x=x, y=y, name="15",marker_color='rgb(26, 123, 184)')
+        l16 = go.Scatter(x=x, y=y, name="16",marker_color='rgb(26, 123, 184)')
 
 
-        exporter = pg.exporters.ImageExporter(win.ci)
-        exporter.parameters()['width'] = 800
-        timer = QtCore.QTimer()
-        traceDict = {"1":trace1,"2":trace2,"3":trace3,"4":trace4,"5":trace5,"6":trace6,"7":trace7,"8":trace8,"9":trace9,"10":trace10,"11":trace11,"12":trace12,"13":trace13,"14":trace14,"15":trace15,"16":trace16}
+        fig = make_subplots(rows=4, cols=4, shared_yaxes=False)
+        fig.update_layout(height=800,width=800,showlegend=False)
+        fig.update_layout(
+            plot_bgcolor='white'
+        )
+        fig.update_xaxes(showticklabels=False,gridcolor="white")
+        fig.update_yaxes(showticklabels=False,gridcolor="white")
+        fig.add_trace(l1, row=1, col=1)
+        fig.add_trace(l2, row=1, col=2)
+        fig.add_trace(l3, row=1, col=3)
+        fig.add_trace(l4, row=1, col=4)
 
+        fig.add_trace(l5, row=2, col=1)
+        fig.add_trace(l6, row=2, col=2)
+        fig.add_trace(l7, row=2, col=3)
+        fig.add_trace(l8, row=2, col=4)
+
+        fig.add_trace(l9, row=3, col=1)
+        fig.add_trace(l10, row=3, col=2)
+        fig.add_trace(l11, row=3, col=3)
+        fig.add_trace(l12, row=3, col=4)
+
+        fig.add_trace(l13, row=4, col=1)
+        fig.add_trace(l14, row=4, col=2)
+        fig.add_trace(l15, row=4, col=3)
+        fig.add_trace(l16, row=4, col=4)
         #-----------------------------------
         #WORKSPACE
         #-----------------------------------
@@ -565,10 +480,17 @@ def OD():
                             else:
                                 name += ","+symb
                         
-                        file_name = "zODworkspace//save//"+name+".png"
+                        file_name = "zODworkspace//save//"+name+".jpg"
                         instancePrint([name])
-                        timer.singleShot(1, lambda: saveImage(current_prices, file_name, win,trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10, trace11, trace12, trace13, trace14, trace15, trace16))
-                        app.exec_()
+                        y_dict = {}
+                        for i in range(len(current_prices)):
+                            y_dict[str(i+1)] = current_prices[i]
+                        t = time.time()
+                        fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
+                        print(time.time() - t)
+                        t = time.time()
+                        fig.write_image(file_name)
+                        print("sub", time.time() - t)
                         ttemp = time.time()
                         if AI_flag:
                             #data
@@ -614,6 +536,5 @@ def OD():
             if time.time()-start_time < 30:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
-
-
 OD()
+
