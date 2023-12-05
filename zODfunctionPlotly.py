@@ -221,6 +221,7 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
         instancePrint([symb])
         instancePrint([x_center,y_center,height,width])
         if x_center > 0.7 and len(dt_list) - x_min < 200:
+            print(x_min,x_max,y_min,y_max,len(dt_list))
             output[symb] = dt_list[x_min-1]
             calibration[symb] = [x_min,x_max,y_min,y_max]
     instancePrint([output])
