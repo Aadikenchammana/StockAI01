@@ -209,7 +209,9 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
         y_min = int((y_center-height/2)*y_ln)
 
         diff = x_ln - x_max
-        x_max = x_ln - 1
+        x_max = 180
+        if x_min < 1:
+            x_min = 1
         flag = True
         if "1" in dt_list:
             flag = False
