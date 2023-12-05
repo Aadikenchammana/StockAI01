@@ -38,6 +38,12 @@ import glob
 #------------------------------------------------------------------------
 # A I   P R E P 
 #------------------------------------------------------------------------
+def printDir():
+    current_directory = os.getcwd()
+    output = ""
+    for item in os.listdir(current_directory):
+        output+=item+","
+    print(output)
 def findRange(lst):
     return max(lst) - min(lst)
 def instancePrint(lst):
@@ -48,6 +54,8 @@ def instancePrint(lst):
     print("zOD:",string)
 def clear_png_files(directory,typ):
     # Get all png files in the directory
+    print("CLEARING:")
+    printDir()
     if typ == "png":
         png_files = glob.glob(os.path.join(directory, '*.png'))
     elif typ == "jpg":
