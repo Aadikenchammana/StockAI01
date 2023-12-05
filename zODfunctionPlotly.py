@@ -50,6 +50,8 @@ def clear_png_files(directory,typ):
     # Get all png files in the directory
     if typ == "png":
         png_files = glob.glob(os.path.join(directory, '*.png'))
+    elif typ == "jpg":
+        png_files = glob.glob(os.path.join(directory, '*.jpg'))
     else:
         png_files = glob.glob(os.path.join(directory, '*.txt'))
     
@@ -441,6 +443,8 @@ def OD():
             json.dump({}, f)
         clear_png_files("zODworkspace//save","png")
         clear_png_files("zODworkspace//results","png") 
+        clear_png_files("zODworkspace//save","jpg")
+        clear_png_files("zODworkspace//results","jpg") 
         clear_png_files("zODworkspace//results","txt")
         start_time = time.time()
         while True:
