@@ -187,13 +187,14 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
         symb = current_symbols[typ-1]
 
         sizex = 800
-        sizey = 600
-        indx = 154
+        sizey = 800
+        indx = 136
         indy = 109
-        outerx = 30
-        outery = 27
-        innerx = 41
-        innery = 37
+        outerx = 80
+        outery = 105
+        outery2 = 86
+        innerx = 32
+        innery = 58
 
         width = width*sizex/indx
         height = height*sizey/indy
