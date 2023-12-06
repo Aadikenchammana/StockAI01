@@ -118,77 +118,86 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
     bboxes = bbox.splitlines()
     output = {}
     calibration = {}
+    sizex = 800
+    sizey = 800
+    indx = 136
+    indy = 109
+    outerx = 80
+    outery = 105
+    outery2 = 86
+    innerx = 32
+    innery = 58
     for bbox in bboxes:
         bbox = bbox.split()
         x_center = float(bbox[1])
         y_center = float(bbox[2])
         width = float(bbox[3])
         height = float(bbox[4])
-        if 0/dimension < y_center < 1/dimension:
-            if 0/dimension < x_center < 1/dimension:
+        if (outery+0*innery+0*indy - innery/2)/sizey < y_center < (outery+0*innery+1*indy + innery/2)/sizey:
+            if (outerx+0*innerx+0*indx - innerx/2)/sizex < x_center < (outerx+0*innerx+1*indx + innerx/2)/sizex:
                 typ = 1
                 x_dimension = 0
                 y_dimension = 0
-            elif 1/dimension < x_center < 2/dimension:
+            elif (outerx+1*innerx+1*indx - innerx/2)/sizex < x_center < (outerx+1*innerx+2*indx + innerx/2)/sizex:
                 typ = 2
                 x_dimension = 1
                 y_dimension = 0
-            elif 2/dimension < x_center < 3/dimension:
+            elif (outerx+2*innerx+2*indx - innerx/2)/sizex < x_center < (outerx+2*innerx+3*indx + innerx/2)/sizex:
                 typ = 3
                 x_dimension = 2
                 y_dimension = 0
-            elif 3/dimension < x_center < 4/dimension:
+            elif (outerx+3*innerx+3*indx - innerx/2)/sizex < x_center < (outerx+3*innerx+4*indx + innerx/2)/sizex:
                 typ = 4
                 x_dimension = 3
                 y_dimension = 0
-        elif 1/dimension < y_center < 2/dimension:
-            if 0/dimension < x_center < 1/dimension:
+        elif (outery+1*innery+1*indy - innery/2)/sizey < y_center < (outery+1*innery+2*indy + innery/2)/sizey:
+            if (outerx+0*innerx+0*indx - innerx/2)/sizex < x_center < (outerx+0*innerx+1*indx + innerx/2)/sizex:
                 typ = 5
                 x_dimension = 0
                 y_dimension = 1
-            elif 1/dimension < x_center < 2/dimension:
+            elif (outerx+1*innerx+1*indx - innerx/2)/sizex < x_center < (outerx+1*innerx+2*indx + innerx/2)/sizex:
                 typ = 6
                 x_dimension = 1
                 y_dimension = 1
-            elif 2/dimension < x_center < 3/dimension:
+            elif (outerx+2*innerx+2*indx - innerx/2)/sizex < x_center < (outerx+2*innerx+3*indx + innerx/2)/sizex:
                 typ = 7
                 x_dimension = 2
                 y_dimension = 1
-            elif 3/dimension < x_center < 4/dimension:
+            elif (outerx+3*innerx+3*indx - innerx/2)/sizex < x_center < (outerx+3*innerx+4*indx + innerx/2)/sizex:
                 typ = 8
                 x_dimension = 3
                 y_dimension = 1
-        elif 2/dimension < y_center < 3/dimension:
-            if 0/dimension < x_center < 1/dimension:
+        elif (outery+2*innery+2*indy - innery/2)/sizey < y_center < (outery+2*innery+3*indy + innery/2)/sizey:
+            if (outerx+0*innerx+0*indx - innerx/2)/sizex < x_center < (outerx+0*innerx+1*indx + innerx/2)/sizex:
                 typ = 9
                 x_dimension = 0
                 y_dimension = 2
-            elif 1/dimension < x_center < 2/dimension:
+            elif (outerx+1*innerx+1*indx - innerx/2)/sizex < x_center < (outerx+1*innerx+2*indx + innerx/2)/sizex:
                 typ = 10
                 x_dimension = 1
                 y_dimension = 2
-            elif 2/dimension < x_center < 3/dimension:
+            elif (outerx+2*innerx+2*indx - innerx/2)/sizex < x_center < (outerx+2*innerx+3*indx + innerx/2)/sizex:
                 typ = 11
                 x_dimension = 2
                 y_dimension = 2
-            elif 3/dimension < x_center < 4/dimension:
+            elif (outerx+3*innerx+3*indx - innerx/2)/sizex < x_center < (outerx+3*innerx+4*indx + innerx/2)/sizex:
                 typ = 12
                 x_dimension = 3
                 y_dimension = 2
-        elif 3/dimension < y_center < 4/dimension:
-            if 0/dimension < x_center < 1/dimension:
+        elif (outery+3*innery+3*indy - innery/2)/sizey < y_center < (outery+3*innery+4*indy + innery/2)/sizey:
+            if (outerx+0*innerx+0*indx - innerx/2)/sizex < x_center < (outerx+0*innerx+1*indx + innerx/2)/sizex:
                 typ = 13
                 x_dimension = 0
                 y_dimension = 3
-            elif 1/dimension < x_center < 2/dimension:
+            elif (outerx+1*innerx+1*indx - innerx/2)/sizex < x_center < (outerx+1*innerx+2*indx + innerx/2)/sizex:
                 typ = 14
                 x_dimension = 1
                 y_dimension = 3
-            elif 2/dimension < x_center < 3/dimension:
+            elif (outerx+2*innerx+2*indx - innerx/2)/sizex < x_center < (outerx+2*innerx+3*indx + innerx/2)/sizex:
                 typ = 15
                 x_dimension = 2
                 y_dimension = 3
-            elif 3/dimension < x_center < 4/dimension:
+            elif (outerx+3*innerx+3*indx - innerx/2)/sizex < x_center < (outerx+3*innerx+4*indx + innerx/2)/sizex:
                 typ = 16
                 x_dimension = 3
                 y_dimension = 3
@@ -196,15 +205,6 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
         lst = current_prices[typ-1]
         symb = current_symbols[typ-1]
 
-        sizex = 800
-        sizey = 800
-        indx = 136
-        indy = 109
-        outerx = 80
-        outery = 105
-        outery2 = 86
-        innerx = 32
-        innery = 58
 
         width = width*sizex/indx
         height = height*sizey/indy
@@ -553,4 +553,3 @@ def OD():
             if time.time()-start_time < 30:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(30-(time.time()-start_time)))
-
