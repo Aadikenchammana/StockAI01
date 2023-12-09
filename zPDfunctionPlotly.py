@@ -1096,5 +1096,3 @@ def PD():
                     time.sleep(int(10-(time.time()-start_time)))
             else:
                 time.sleep(20)
-
-PD()
