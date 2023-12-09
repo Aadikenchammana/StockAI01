@@ -163,4 +163,3 @@ def DC():
                 json.dump(prices, f)
         time.sleep(2)
 
-DC()
