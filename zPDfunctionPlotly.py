@@ -1,35 +1,3 @@
-import argparse
-import time
-from pathlib import Path
-import os
-import subprocess
-import sys
-import pytz
-from datetime import datetime
-import calendar
-import json
-import cv2
-import torch
-import torch.backends.cudnn as cudnn
-from numpy import random
-import matplotlib.pyplot as plt
-from PyQt5 import QtWidgets
-import pyqtgraph as pg
-import pyqtgraph.exporters
-from pyqtgraph.Qt import QtCore, QtGui
-from pyqtgraph import GraphicsLayoutWidget
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-
-from models.experimental import attempt_load
-from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
-    scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.plots import plot_one_box
-from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
-import shutil
-import glob
 
 
 #subprocess.run(['pip', 'install', '-qr', 'requirements.txt'])
@@ -37,11 +5,12 @@ import glob
 # A I   P R E P 
 #------------------------------------------------------------------------
 def printDir():
+    import os
     current_directory = os.getcwd()
     output = ""
     for item in os.listdir(current_directory):
         output+=item+","
-    print(output)
+    instancePrint([output])
 def findRange(lst):
     return max(lst) - min(lst)
 def instancePrint(lst):
@@ -51,9 +20,11 @@ def instancePrint(lst):
     string = string[1:]
     print("zPD:",string)
 def clear_files(directory,typ):
+    import glob
+    import os
+    
     # Get all png files in the directory
-    print("CLEARING:")
-    printDir()
+    instancePrint(["CLEARING:"])
     if typ == "png":
         png_files = glob.glob(os.path.join(directory, '*.png'))
     elif typ == "jpg":
@@ -67,6 +38,8 @@ def clear_files(directory,typ):
             os.remove(png_file)
     instancePrint(["DIRECTORY CLEARED:",directory])
 def determine_valid(lstx,lsty,end_x,end_y):
+    import json
+    
     mn = min(lsty)
     flag = True
     lsty = [item-mn for item in lsty]
@@ -111,13 +84,15 @@ def determine_valid(lstx,lsty,end_x,end_y):
     d5 = right_shoulder_x - t2_x
 
     coef = 4
-
+    
     if max([d1,d2,d3,d4,d5])/min([d1,d2,d3,d4,d5]) > coef and False:
         #instancePrint(["FALSE: D1"])
         return False
-    
     return True
 def read_json_file(file_path,prices):
+    import json
+    import time
+    import os
     max_attempts = 10
     current_attempt = 1
 
@@ -166,6 +141,9 @@ def ma(lst,interval):
     return output
 
 def current_time(timezone):
+    import pytz
+    from datetime import datetime
+    import calendar
     time = pytz.timezone(timezone) 
     time = datetime.now(time)
     
@@ -415,6 +393,32 @@ def add_to_dct_lst(dct,ky,val):
     return dct
 
 def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment):
+    import time
+    from pathlib import Path
+    import os
+    import subprocess
+    import sys
+    import pytz
+    from datetime import datetime
+    import calendar
+    import json
+    import cv2
+    import torch
+    import torch.backends.cudnn as cudnn
+    from numpy import random
+    import matplotlib.pyplot as plt
+    from pyqtgraph.Qt import QtGui, QtCore
+    import pyqtgraph as pg
+    import numpy as np
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from models.experimental import attempt_load
+    from utils.datasets import LoadStreams, LoadImages
+    from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
+        scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+    from utils.plots import plot_one_box
+    from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+    import glob
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -522,35 +526,46 @@ def combine(lst):
         output += item
     return output
 def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,trend_ln,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,x_size,y_size,my_dpi,stride,dimension,fig,conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project,exist_ok,augment):
-    #return True
+    import time
+    from pathlib import Path
+    import os
+    import subprocess
+    import sys
+    import pytz
+    from datetime import datetime
+    import calendar
+    import json
+    import cv2
+    import torch
+    import torch.backends.cudnn as cudnn
+    from numpy import random
+    import matplotlib.pyplot as plt
+    from pyqtgraph.Qt import QtGui, QtCore
+    import pyqtgraph as pg
+    import numpy as np
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from models.experimental import attempt_load
+    from utils.datasets import LoadStreams, LoadImages
+    from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
+        scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+    from utils.plots import plot_one_box
+    from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+    import glob
     points_x = [item + trend_ln - detection_ln for item in points_x]
     usx = [item + trend_ln - detection_ln for item in usx]
     
     left_shoulder_x,t1_x,head_x,t2_x,right_shoulder_x = points_x
     left_shoulder,t1,head,t2,right_shoulder = points_y
-
     symbol = symbol+"_40"
+    ogx = x
+    ogy = prices
+    y = ma(prices,40)
     current_symbols = [symbol]
     current_prices = [prices]
     for i in range(15):
         current_symbols.append("tsymb"+str(i)+"_40")
         current_prices.append([0 for item in prices])
-    ogx = x
-    ogy = prices
-    y = ma(prices,40)
-    current_ma_prices = [y]
-    for i in range(15):
-        current_ma_prices.append([0 for item in y])
-    y_dict = {}
-    for i in range(len(current_ma_prices)):
-        y_dict[str(i+1)] = current_ma_prices[i]
-    t = time.time()
-    fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-    print(time.time() - t)
-    t = time.time()
-    fig.write_image(file_name)
-    print("sub", time.time() - t)
-    ttemp = time.time()
     name = ""
     for symb in current_symbols:
         
@@ -564,8 +579,16 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     
     with open(txt_name, 'w') as f:
         f.write('')
-    plt.savefig(file_name, format='jpeg')
-    
+    y_dict = {}
+    for i in range(len(current_prices)):
+        y_dict[str(i+1)] = current_prices[i]
+    t = time.time()
+    fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
+    instancePrint([time.time() - t])
+    t = time.time()
+    fig.write_image(file_name)
+    instancePrint(["sub", time.time() - t])
+    ttemp = time.time()
         #data
     dataset = LoadImages(source, img_size=imgsz, stride=stride)
     # prediction 
@@ -580,7 +603,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     for tsymbol in current_symbols:
         name += tsymbol+","
     name = name[:-1]
-    x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
+    x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_prices,dt_list,dimension)
     os.remove(file_name)
     #os.remove(txt_name)
 
@@ -629,6 +652,7 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
     plt.scatter(trend_x_list,trend_y_list,color="yellow")
     plt.plot(ogx,ogy)
     plt.plot(x,y)
+    plt.scatter([trend_x],[trend_y], color="purple")
     plt.savefig("zPDworkspace/trends/"+symbol+"TREND.jpg", format='jpeg')
     changes = []
     prev = lst_y[0]
@@ -648,14 +672,39 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
 
 
 def PD():
+    import time
+    from pathlib import Path
+    import os
+    import subprocess
+    import sys
+    import pytz
+    from datetime import datetime
+    import calendar
+    import json
+    import cv2
+    import torch
+    import torch.backends.cudnn as cudnn
+    from numpy import random
+    import matplotlib.pyplot as plt
+    from pyqtgraph.Qt import QtGui, QtCore
+    import pyqtgraph as pg
+    import numpy as np
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from models.experimental import attempt_load
+    from utils.datasets import LoadStreams, LoadImages
+    from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
+        scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+    from utils.plots import plot_one_box
+    from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+    import glob
+    import shutil
     instancePrint(["YURRRR"])
     with torch.no_grad():
         instancePrint(["1"])
         #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         source, weights, view_img, save_txt, imgsz, trace, device = 'zPDworkspace//save','zPD_weights_new/weights4_1_2.pt', False, False, 640, True,''
         conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
-        print(source, weights, view_img, save_txt, imgsz, trace)
-        print(type(source),type(weights))
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
         webcam = False
@@ -901,10 +950,10 @@ def PD():
                                 y_dict[str(i+1)] = current_ma_prices[i]
                             t = time.time()
                             fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                            print(time.time() - t)
+                            instancePrint([time.time() - t])
                             t = time.time()
                             fig.write_image(file_name)
-                            print("sub", time.time() - t)
+                            instancePrint(["sub", time.time() - t])
                             ttemp = time.time()
                             if AI_flag:
                                 #data
@@ -917,11 +966,11 @@ def PD():
                                 t0 = time.time()
                                 predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                                 ttemp = time.time()
-                                print("PREDICTION:",ttemp - t0)
+                                instancePrint(["PREDICTION:",ttemp - t0])
                             if True:
                                 ttemp = time.time()
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
-                                print("EXTRACT",time.time() - ttemp)
+                                instancePrint(["EXTRACT",time.time() - ttemp])
                                 ttemp = time.time()
                                 current_keys = []
                                 for key in x_dict.keys():
@@ -930,7 +979,6 @@ def PD():
                                 for key in current_keys:
                                     instancePrint(["--------"])
                                     instancePrint([key])
-                                    ttemp = time.time()
                                     result_x = x_dict[key]
                                     result_y = y_dict[key]
                                     result_class = class_dict[key]
@@ -952,8 +1000,6 @@ def PD():
                                         plt.scatter(x,y)
                                         plt.savefig("zPDworkspace/current/"+symbol+".jpg", format='jpeg')
                                         plt.close('all')
-                                    print("EXTRACT1",time.time() - ttemp)
-                                    ttemp = time.time()
 
                                     points = []
                                     for item in x:
@@ -967,8 +1013,6 @@ def PD():
                                         x = x[-checking_ln:]
                                         y = y[-checking_ln:]
                                         classes = classes[-checking_ln:]
-                                    print("EXTRACT2",time.time() - ttemp)
-                                    ttemp = time.time()
                                     if (ma_interval == 5 and len(points) > 11) or (ma_interval == 20 and len(points) > 9):
                                         new_false_list.append(symbol)
                                     else:
@@ -1001,6 +1045,7 @@ def PD():
                                                         after_bool = max(after_y_list) <  right_shoulder
                                                     else:
                                                         after_bool = True
+                                                    after_bool = True
                                                     if (end < min(t1,t2)) and after_bool:
                                                         instancePrint(["developed"])
                                                         y_trend_lst = prices[symbol_name]
@@ -1009,6 +1054,7 @@ def PD():
                                                         x_trend_lst = []
                                                         for i in range(len(y_trend_lst)):
                                                             x_trend_lst.append(i)
+                                                        print("checking trend")
                                                         trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,x_size,y_size,my_dpi,stride,dimension,fig, conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project,exist_ok, augment)
                                                         if trend_flag:
                                                             instancePrint(["trend verified"])
@@ -1042,9 +1088,7 @@ def PD():
                                                     instancePrint(["False"])
                                         else:
                                             instancePrint(["Not enough points"])
-                                    print("EXTRACT3",time.time() - ttemp)
-                                    ttemp = time.time()
-                                print("CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys))
+                                instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
                                 ttemp = time.time()
                             os.remove(file_name)
                             plt.close('all')
@@ -1060,8 +1104,10 @@ def PD():
                 for tmp in new_false_list:
                     source_path = "zPDworkspace/current/"+tmp+".jpg"
                     destination_path = "zPDworkspace/false/"+tmp+".jpg"
-                    if not(os.path.exists(destination_path)) and currentFlag:
-                        shutil.copyfile(source_path, destination_path)
+                    if not(os.path.exists(destination_path)):
+                        if currentFlag:
+                            shutil.copyfile(source_path, destination_path)
+                            
                     if tmp in watchlist.keys():
                         del watchlist[tmp]
                 current_watchlist = read_json_file('zODworkspace/watchlist.txt',watchlist)
