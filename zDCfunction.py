@@ -144,6 +144,7 @@ def DC():
             lst = prices[symbol]
             if symbol == "dt_list":
                 dt = response[1]
+                instancePrint(["CURRENT DT:",dt])
                 lst.append(dt)
                 if len(lst) > max_ln:
                     for i in range(len(lst)-max_ln):
