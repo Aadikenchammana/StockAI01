@@ -837,6 +837,11 @@ def PD():
             symbols = list(watchlist.keys())
             remove = []
             prices = read_json_file('zODworkspace/prices.txt',prices)
+            state = prices["state"]
+            if state["continue"] == "False":
+                instancePrint(["PROCESS BROKEN"])
+                break
+            del prices["state"]
             dt_list = prices["dt_list"]
             instancePrint(["CURRENT DT:",dt_list[len(dt_list)-1]])
             currDt = dt_list[len(dt_list)-1]

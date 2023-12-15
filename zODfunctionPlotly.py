@@ -1,36 +1,3 @@
-import time
-from pathlib import Path
-import os
-import subprocess
-import sys
-import pytz
-from datetime import datetime
-import calendar
-import json
-import cv2
-import torch
-import torch.backends.cudnn as cudnn
-from numpy import random
-import matplotlib.pyplot as plt
-from pyqtgraph.Qt import QtGui, QtCore
-import pyqtgraph as pg
-import numpy as np
-from PyQt5 import QtWidgets
-import pyqtgraph as pg
-import pyqtgraph.exporters
-from pyqtgraph.Qt import QtCore, QtGui
-from pyqtgraph import GraphicsLayoutWidget
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-
-from models.experimental import attempt_load
-from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
-    scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.plots import plot_one_box
-from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
-import glob
 
 
 
@@ -39,6 +6,7 @@ import glob
 # A I   P R E P 
 #------------------------------------------------------------------------
 def printDir():
+    import os
     current_directory = os.getcwd()
     output = ""
     for item in os.listdir(current_directory):
@@ -53,9 +21,10 @@ def instancePrint(lst):
     string = string[1:]
     print("zOD:",string)
 def clear_png_files(directory,typ):
+    import glob
+    import os
     # Get all png files in the directory
     print("CLEARING:")
-    printDir()
     if typ == "png":
         png_files = glob.glob(os.path.join(directory, '*.png'))
     elif typ == "jpg":
@@ -69,6 +38,8 @@ def clear_png_files(directory,typ):
             os.remove(png_file)
     instancePrint(["DIRECTORY CLEARED:",directory])
 def read_json_file(file_path,prices):
+    import time
+    import json
     max_attempts = 10
     current_attempt = 1
 
@@ -102,7 +73,9 @@ def ma(lst,interval):
     return output
 
 def current_time(timezone):
-    
+    import pytz
+    from datetime import datetime
+    import calendar
     time = pytz.timezone(timezone) 
     time = datetime.now(time)
     
@@ -113,6 +86,8 @@ def current_time(timezone):
     return dt, time, day
 
 def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
+    import os
+    import json
     with open('zODworkspace//results//'+name+'.txt', 'r') as f:
         bbox = f.read().strip()
     bboxes = bbox.splitlines()
@@ -231,13 +206,38 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
         instancePrint([symb])
         instancePrint([x_center,y_center,height,width])
         if x_center > 0.7 and len(dt_list) - x_min < 200:
-            print(x_min,x_max,y_min,y_max,len(dt_list))
             output[symb] = dt_list[x_min-1]
             calibration[symb] = [x_min,x_max,y_min,y_max]
     instancePrint([output])
     return output,calibration
 
 def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment):
+    import time
+    from pathlib import Path
+    import os
+    import subprocess
+    import sys
+    import pytz
+    from datetime import datetime
+    import calendar
+    import json
+    import cv2
+    import torch
+    import torch.backends.cudnn as cudnn
+    from numpy import random
+    import matplotlib.pyplot as plt
+    from pyqtgraph.Qt import QtGui, QtCore
+    import pyqtgraph as pg
+    import numpy as np
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from models.experimental import attempt_load
+    from utils.datasets import LoadStreams, LoadImages
+    from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
+        scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+    from utils.plots import plot_one_box
+    from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+    import glob
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -347,7 +347,32 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
 
 def OD():
-
+    import time
+    from pathlib import Path
+    import os
+    import subprocess
+    import sys
+    import pytz
+    from datetime import datetime
+    import calendar
+    import json
+    import cv2
+    import torch
+    import torch.backends.cudnn as cudnn
+    from numpy import random
+    import matplotlib.pyplot as plt
+    from pyqtgraph.Qt import QtGui, QtCore
+    import pyqtgraph as pg
+    import numpy as np
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from models.experimental import attempt_load
+    from utils.datasets import LoadStreams, LoadImages
+    from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
+        scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+    from utils.plots import plot_one_box
+    from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+    import glob
     instancePrint(["YURRRR"])
 
     #------------------------------------------------------------------------
@@ -357,8 +382,6 @@ def OD():
         #source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
         source, weights, view_img, save_txt, imgsz, trace, device = 'zODworkspace//save','zODweights_new//weights4_1_1.pt', False, False, 640, True,''
         conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,augment = 0.25, 0.45, False, False, None, False, False, 'runs/detect', 'exp', False,False
-        print(source, weights, view_img, save_txt, imgsz, trace)
-        print(type(source),type(weights))
         save_img = True#not opt.nosave and not source.endswith('.txt')
         save_txt = True
         webcam = False
@@ -464,9 +487,14 @@ def OD():
             dt,now,day = current_time("America/New_York")
             if plot_flag:
                 prices = read_json_file('zODworkspace//prices.txt',prices)
+                state = prices["state"]
+                if state["continue"] == "False":
+                    instancePrint(["PROCESS BROKEN"])
+                    break
                 dt_list = prices["dt_list"]
                 dt_list = dt_list[-max_ln:]
                 del prices["dt_list"]
+                del prices["state"]
                 symbols = list(prices.keys())
                 iteration = 0
                 current_symbols = []
@@ -486,7 +514,6 @@ def OD():
                         x.append(i)
                     current_symbols.append(symbol)
                     current_prices.append(y)
-                    print(iteration,len(y),findRange(y))
                     if iteration == dimension**2:
                         ttemp = time.time()
                         name = ""
@@ -503,10 +530,10 @@ def OD():
                             y_dict[str(i+1)] = current_prices[i]
                         t = time.time()
                         fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                        print(time.time() - t)
+                        instancePrint([time.time() - t])
                         t = time.time()
                         fig.write_image(file_name)
-                        print("sub", time.time() - t)
+                        instancePrint(["sub", time.time() - t])
                         ttemp = time.time()
                         if AI_flag:
                             #data
@@ -519,7 +546,7 @@ def OD():
                             t0 = time.time()
                             predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                             ttemp = time.time()
-                            print("PREDICTION:",ttemp - t0)
+                            instancePrint(["PREDICTION:",ttemp - t0])
                             results, points = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
                             ttemp = time.time()
                             for key in points.keys():
