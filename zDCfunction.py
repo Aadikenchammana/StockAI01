@@ -141,6 +141,7 @@ def DC():
     while flag:
         counter +=1
         if counter == 10:
+            counter = 0
             os.system('clear')
         dt,now,day = current_time("America/New_York")
         instancePrint(dt)
