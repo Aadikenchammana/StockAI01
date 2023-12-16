@@ -66,6 +66,8 @@ def current_time(timezone):
 
 
 def DC():
+    import os
+    import json
     #-----------------------------------------
     #S E T U P
     #-----------------------------------------
@@ -135,7 +137,11 @@ def DC():
     #B O D Y
     #-----------------------------------------
     time.sleep(10)
+    counter = 0
     while flag:
+        counter +=1
+        if counter == 10:
+            os.system('clear')
         dt,now,day = current_time("America/New_York")
         instancePrint(dt)
         with open('zODworkspace//prices.txt', 'r') as f:
