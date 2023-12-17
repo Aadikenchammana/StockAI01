@@ -19,7 +19,7 @@ def instancePrint(lst):
     for item in lst:
         string+= " "+str(item)
     string = string[1:]
-    print("zOD:",string)
+    #print("zOD:",string)
 def clear_png_files(directory,typ):
     import glob
     import os

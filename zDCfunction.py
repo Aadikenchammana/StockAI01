@@ -144,7 +144,6 @@ def DC():
             counter = 0
             os.system('clear')
         dt,now,day = current_time("America/New_York")
-        instancePrint(dt)
         with open('zODworkspace//prices.txt', 'r') as f:
             prices = json.loads(f.read())
         msg = ""
