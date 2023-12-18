@@ -522,16 +522,16 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        #instancePrint([name])
+                        instancePrint([name])
                         y_dict = {}
                         for i in range(len(current_prices)):
                             y_dict[str(i+1)] = current_prices[i]
                         t = time.time()
                         fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                        #instancePrint([time.time() - t])
+                        instancePrint([time.time() - t])
                         t = time.time()
                         fig.write_image(file_name)
-                        #instancePrint(["sub", time.time() - t])
+                        instancePrint(["sub", time.time() - t])
                         ttemp = time.time()
                         if AI_flag:
                             #data
@@ -544,7 +544,7 @@ def OD():
                             t0 = time.time()
                             predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                             ttemp = time.time()
-                            #instancePrint(["PREDICTION:",ttemp - t0])
+                            instancePrint(["PREDICTION:",ttemp - t0])
                             results, points = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
                             ttemp = time.time()
                             for key in points.keys():
