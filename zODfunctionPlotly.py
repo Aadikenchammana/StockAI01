@@ -487,21 +487,27 @@ def OD():
             if plot_flag:
                 prices = read_json_file('zODworkspace//prices.txt',prices)
                 state = prices["state"]
+                print('d')
                 if state["continue"] == "False":
+                    print('dg')
                     instancePrint(["PROCESS BROKEN"])
                     break
                 dt_list = prices["dt_list"]
                 dt_list = dt_list[-max_ln:]
                 del prices["dt_list"]
                 del prices["state"]
+                print('dw')
                 symbols = list(prices.keys())
                 iteration = 0
                 current_symbols = []
+                print('de')
                 current_prices = []
+                print('dr')
                 if len(symbols)%(dimension**2) != 0:
                     for i in range(dimension**2 - len(symbols)%(dimension**2)):
                         symbols.append('temp_symbol'+str(i))
                         prices['temp_symbol'+str(i)] = [0 for item in dt_list]
+                print('d')
                 for symbol in symbols:
                     ttemp = time.time()
                     iteration+=1
@@ -511,9 +517,12 @@ def OD():
                     x = []
                     for i in range(len(y)):
                         x.append(i)
+                    print('d')
                     current_symbols.append(symbol)
                     current_prices.append(y)
+                    print('d')
                     if iteration == dimension**2:
+                        print('df')
                         ttemp = time.time()
                         name = ""
                         for symb in current_symbols:
