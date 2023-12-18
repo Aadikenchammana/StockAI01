@@ -483,6 +483,7 @@ def OD():
             instancePrint(["--------------------"])
             start_time = time.time()
             dt,now,day = current_time("America/New_York")
+            print(1,plot_flag)
             if plot_flag:
                 prices = read_json_file('zODworkspace//prices.txt',prices)
                 state = prices["state"]
