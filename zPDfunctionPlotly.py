@@ -1018,7 +1018,7 @@ def PD():
                                         x = x[-checking_ln:]
                                         y = y[-checking_ln:]
                                         classes = classes[-checking_ln:]
-                                    if (ma_interval == 5 and len(points) > 11) or (ma_interval == 20 and len(points) > 9):
+                                    if (ma_interval == 5 and len(points) > 9) or (ma_interval == 20 and len(points) > 7):
                                         new_false_list.append(symbol)
                                     else:
                                         if len(y) > 4:
@@ -1087,6 +1087,8 @@ def PD():
                                                                     temp_dict["class"] = classes
                                                                     temp_dict["trend"] = [trend_ln,trend_height]
                                                                     json.dump(temp_dict, f)
+                                                        else:
+                                                            new_false_list.append(symbol)
                                                     else:
                                                         hi = 1
                                                         #instancePrint(["waiting"])
