@@ -176,7 +176,7 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
                 typ = 16
                 x_dimension = 3
                 y_dimension = 3
-        #instancePrint ([typ])
+        instancePrint ([typ])
         lst = current_prices[typ-1]
         symb = current_symbols[typ-1]
 
@@ -203,12 +203,12 @@ def extract_hs(current_symbols,current_prices,dt_list,name,dimension):
             if dt_list.index("1") < 130:
                 flag = True
         flag = True
-        #instancePrint([symb])
-        #instancePrint([x_center,y_center,height,width])
+        instancePrint([symb])
+        instancePrint([x_center,y_center,height,width])
         if x_center > 0.7 and len(dt_list) - x_min < 200:
             output[symb] = dt_list[x_min-1]
             calibration[symb] = [x_min,x_max,y_min,y_max]
-    #instancePrint([output])
+    instancePrint([output])
     return output,calibration
 
 def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment):
@@ -299,6 +299,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+                    #instancePrint("XYXY",xyxy)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
@@ -312,7 +313,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            #instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
+            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -323,6 +324,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
+                    #instancePrint(f" The image with the result is saved in: {save_path}")
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
                         vid_path = save_path
@@ -522,16 +524,16 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        #instancePrint([name])
+                        instancePrint([name])
                         y_dict = {}
                         for i in range(len(current_prices)):
                             y_dict[str(i+1)] = current_prices[i]
                         t = time.time()
                         fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                        #instancePrint([time.time() - t])
+                        instancePrint([time.time() - t])
                         t = time.time()
                         fig.write_image(file_name)
-                        #instancePrint(["sub", time.time() - t])
+                        instancePrint(["sub", time.time() - t])
                         ttemp = time.time()
                         if AI_flag:
                             #data
