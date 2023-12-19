@@ -313,7 +313,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
+            #instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -524,10 +524,10 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        string = ""
-                        for i in range(399):
-                            string += str(i)
-                        instancePrint([string])
+                        #string = ""
+                        #for i in range(399):
+                        #    string += str(i)
+                        #instancePrint([string])
                         #instancePrint([name])
                         y_dict = {}
                         for i in range(len(current_prices)):
