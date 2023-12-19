@@ -546,7 +546,7 @@ def OD():
                             t0 = time.time()
                             predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                             ttemp = time.time()
-                            instancePrint(["PREDICTION:",ttemp - t0])
+                            #instancePrint(["PREDICTION:",ttemp - t0])
                             results, points = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
                             ttemp = time.time()
                             for key in points.keys():
