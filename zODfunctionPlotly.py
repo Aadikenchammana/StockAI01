@@ -525,7 +525,7 @@ def OD():
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
                         string = ""
-                        for i in range(len(300)):
+                        for i in range(399):
                             string += str(i)
                         instancePrint([string])
                         #instancePrint([name])
