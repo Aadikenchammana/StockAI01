@@ -1096,7 +1096,7 @@ def PD():
                                         else:
                                             hi1 = 2
                                             #instancePrint(["Not enough points"])
-                                instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
+                                #instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
                                 ttemp = time.time()
                             os.remove(file_name)
                             plt.close('all')
