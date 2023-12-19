@@ -46,7 +46,7 @@ def read_json_file(file_path,prices):
     while current_attempt <= max_attempts:
         try:
             with open(file_path) as file:
-                data = json.load(file)
+                data = json.loads(file)
             return data
         except json.JSONDecodeError:
             instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Retrying..."])
