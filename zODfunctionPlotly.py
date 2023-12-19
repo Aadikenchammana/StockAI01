@@ -533,7 +533,7 @@ def OD():
                         #instancePrint([time.time() - t])
                         t = time.time()
                         fig.write_image(file_name)
-                        #instancePrint(["sub", time.time() - t])
+                        instancePrint(["sub", time.time() - t])
                         ttemp = time.time()
                         if AI_flag:
                             #data
