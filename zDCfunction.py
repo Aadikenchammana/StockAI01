@@ -179,8 +179,10 @@ def DC():
                     for i in range(len(lst)-max_ln):
                         lst.pop(0)
                 prices[symbol] = lst
+        ttemp = time.time()
         with open('zODworkspace//prices.txt', 'w') as f:
                 json.dump(prices, f)
+        instancePrint(["UPLOADAGE: ",time.time() - ttemp])
         if state["continue"] == "False":
             instancePrint(["PROCESS BROKE"])
             break
