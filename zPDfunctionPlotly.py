@@ -480,7 +480,6 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    #instancePrint("XYXY",xyxy)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
@@ -494,7 +493,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            #instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
+            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -505,7 +504,6 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
-                    #instancePrint(f" The image with the result is saved in: {save_path}")
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
                         vid_path = save_path
@@ -584,10 +582,10 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
         y_dict[str(i+1)] = current_prices[i]
     t = time.time()
     fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-    #instancePrint([time.time() - t])
+    instancePrint([time.time() - t])
     t = time.time()
     fig.write_image(file_name)
-    #instancePrint(["sub", time.time() - t])
+    instancePrint(["sub", time.time() - t])
     ttemp = time.time()
         #data
     dataset = LoadImages(source, img_size=imgsz, stride=stride)
@@ -868,7 +866,7 @@ def PD():
                         valid_flag = True
                         start_index = dt_list.index(start)
                         lst = dt_list[start_index:]
-                    #instancePrint([dt_list])
+                    instancePrint([dt_list])
                     if valid_flag and str(start) in dt_list and len(lst) < 150:
                         cleaned_symbols.append(symbol)
                     else:
@@ -955,10 +953,10 @@ def PD():
                                 y_dict[str(i+1)] = current_ma_prices[i]
                             t = time.time()
                             fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                            #instancePrint([time.time() - t])
+                            instancePrint([time.time() - t])
                             t = time.time()
                             fig.write_image(file_name)
-                            #instancePrint(["sub", time.time() - t])
+                            instancePrint(["sub", time.time() - t])
                             ttemp = time.time()
                             if AI_flag:
                                 #data
@@ -971,19 +969,19 @@ def PD():
                                 t0 = time.time()
                                 predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                                 ttemp = time.time()
-                                #instancePrint(["PREDICTION:",ttemp - t0])
+                                instancePrint(["PREDICTION:",ttemp - t0])
                             if True:
                                 ttemp = time.time()
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
-                                #instancePrint(["EXTRACT",time.time() - ttemp])
+                                instancePrint(["EXTRACT",time.time() - ttemp])
                                 ttemp = time.time()
                                 current_keys = []
                                 for key in x_dict.keys():
                                     if key.split(":")[0] != "tempsymbol":
                                         current_keys.append(key)
                                 for key in current_keys:
-                                    #instancePrint(["--------"])
-                                    #instancePrint([key])
+                                    instancePrint(["--------"])
+                                    instancePrint([key])
                                     result_x = x_dict[key]
                                     result_y = y_dict[key]
                                     result_class = class_dict[key]
@@ -1052,7 +1050,7 @@ def PD():
                                                         after_bool = True
                                                     after_bool = True
                                                     if (end < min(t1,t2)) and after_bool:
-                                                        #instancePrint(["developed"])
+                                                        instancePrint(["developed"])
                                                         y_trend_lst = prices[symbol_name]
                                                         y_trend_lst = y_trend_lst
                                                         dt_list = og_dt_list[-1*max_trend_len:]
@@ -1062,7 +1060,7 @@ def PD():
                                                         print("checking trend")
                                                         trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,x_size,y_size,my_dpi,stride,dimension,fig, conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project,exist_ok, augment)
                                                         if trend_flag:
-                                                            #instancePrint(["trend verified"])
+                                                            instancePrint(["trend verified"])
                                                             source_path = "zPDworkspace/current/"+symbol+".jpg"
                                                             if (t1+t2)/2 != 0 and (head - (t1+t2)/2)/((t1+t2)/2) > 0.004:
                                                                 destination_path = "zPDworkspace/found/zregression/"+symbol+"_"+currDt+".jpg"#"zPDworkspace/found/big/"+symbol+"_"+currDt+".jpg"
@@ -1091,14 +1089,14 @@ def PD():
                                                             new_false_list.append(symbol)
                                                     else:
                                                         hi = 1
-                                                        #instancePrint(["waiting"])
+                                                        instancePrint(["waiting"])
                                                 else:
                                                     hi = 1
-                                                    #instancePrint(["False"])
+                                                    instancePrint(["False"])
                                         else:
                                             hi1 = 2
-                                            #instancePrint(["Not enough points"])
-                                #instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
+                                            instancePrint(["Not enough points"])
+                                instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
                                 ttemp = time.time()
                             os.remove(file_name)
                             plt.close('all')
