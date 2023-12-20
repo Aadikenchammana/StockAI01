@@ -53,7 +53,7 @@ def read_json_file(file_path,prices):
             instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Error: {e}"])
             instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Retrying..."])
             current_attempt += 1
-            time.sleep(0.05)  # Wait for 1 second before retrying
+            time.sleep(0.2)  # Wait for 1 second before retrying
 
     instancePrint(["Max attempts reached. Unable to read JSON file."])
     return prices
