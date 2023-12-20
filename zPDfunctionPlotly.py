@@ -19,24 +19,26 @@ def instancePrint(lst):
         string+= " "+str(item)
     string = string[1:]
     print("zPD:",string)
-def clear_files(directory,typ):
-    import glob
-    import os
-    
-    # Get all png files in the directory
-    instancePrint(["CLEARING:"])
-    if typ == "png":
-        png_files = glob.glob(os.path.join(directory, '*.png'))
-    elif typ == "jpg":
-        png_files = glob.glob(os.path.join(directory, '*.jpg'))
-    else:
-        png_files = glob.glob(os.path.join(directory, '*.txt'))
-    
-    # Iterate over each png file
-    for png_file in png_files:
-        if (os.path.exists(png_file)):
-            os.remove(png_file)
-    instancePrint(["DIRECTORY CLEARED:",directory])
+def read_json_file(file_path,prices):
+    import time
+    import json
+    max_attempts = 10
+    current_attempt = 1
+
+    while current_attempt <= max_attempts:
+        try:
+            with open(file_path, "r") as f:
+                data = json.loads(f.read())
+            return data
+        except json.JSONDecodeError as e:
+            instancePrint([file_path])
+            instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Error: {e}"])
+            instancePrint([f"Attempt {current_attempt}: Failed to read JSON file. Retrying..."])
+            current_attempt += 1
+            time.sleep(0.05)  # Wait for 1 second before retrying
+
+    instancePrint(["Max attempts reached. Unable to read JSON file."])
+    return prices
 def determine_valid(lstx,lsty,end_x,end_y):
     import json
     
@@ -866,7 +868,7 @@ def PD():
                         valid_flag = True
                         start_index = dt_list.index(start)
                         lst = dt_list[start_index:]
-                    instancePrint([dt_list])
+                    #instancePrint([dt_list])
                     if valid_flag and str(start) in dt_list and len(lst) < 150:
                         cleaned_symbols.append(symbol)
                     else:
@@ -980,8 +982,8 @@ def PD():
                                     if key.split(":")[0] != "tempsymbol":
                                         current_keys.append(key)
                                 for key in current_keys:
-                                    instancePrint(["--------"])
-                                    instancePrint([key])
+                                    #instancePrint(["--------"])
+                                    #instancePrint([key])
                                     result_x = x_dict[key]
                                     result_y = y_dict[key]
                                     result_class = class_dict[key]
@@ -1050,7 +1052,7 @@ def PD():
                                                         after_bool = True
                                                     after_bool = True
                                                     if (end < min(t1,t2)) and after_bool:
-                                                        instancePrint(["developed"])
+                                                        #instancePrint(["developed"])
                                                         y_trend_lst = prices[symbol_name]
                                                         y_trend_lst = y_trend_lst
                                                         dt_list = og_dt_list[-1*max_trend_len:]
@@ -1060,7 +1062,7 @@ def PD():
                                                         print("checking trend")
                                                         trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,x_size,y_size,my_dpi,stride,dimension,fig, conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project,exist_ok, augment)
                                                         if trend_flag:
-                                                            instancePrint(["trend verified"])
+                                                            #instancePrint(["trend verified"])
                                                             source_path = "zPDworkspace/current/"+symbol+".jpg"
                                                             if (t1+t2)/2 != 0 and (head - (t1+t2)/2)/((t1+t2)/2) > 0.004:
                                                                 destination_path = "zPDworkspace/found/zregression/"+symbol+"_"+currDt+".jpg"#"zPDworkspace/found/big/"+symbol+"_"+currDt+".jpg"
@@ -1089,13 +1091,13 @@ def PD():
                                                             new_false_list.append(symbol)
                                                     else:
                                                         hi = 1
-                                                        instancePrint(["waiting"])
+                                                        #instancePrint(["waiting"])
                                                 else:
                                                     hi = 1
-                                                    instancePrint(["False"])
+                                                    #instancePrint(["False"])
                                         else:
                                             hi1 = 2
-                                            instancePrint(["Not enough points"])
+                                            #instancePrint(["Not enough points"])
                                 instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
                                 ttemp = time.time()
                             os.remove(file_name)
