@@ -524,16 +524,16 @@ def OD():
                                 name += ","+symb
                         
                         file_name = "zODworkspace//save//"+name+".jpg"
-                        instancePrint([name])
+                        #instancePrint([name])
                         y_dict = {}
                         for i in range(len(current_prices)):
                             y_dict[str(i+1)] = current_prices[i]
                         t = time.time()
                         fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                        instancePrint([time.time() - t])
+                        #instancePrint([time.time() - t])
                         t = time.time()
                         fig.write_image(file_name)
-                        instancePrint(["sub", time.time() - t])
+                        #instancePrint(["sub", time.time() - t])
                         ttemp = time.time()
                         if AI_flag:
                             #data
