@@ -479,104 +479,119 @@ def OD():
         clear_files("zODworkspace//results","txt")
         start_time = time.time()
         while True:
-            instancePrint(["--------------------"])
-            instancePrint(["STARTING NEW ITERATION"])
-            instancePrint(["TIME",time.time()-start_time,time.time(),start_time])
-            instancePrint(["--------------------"])
-            start_time = time.time()
-            dt,now,day = current_time("America/New_York")
-            if plot_flag:
-                prices = read_json_file('zODworkspace//prices.txt',prices)
-                state = prices["state"]
-                if state["continue"] == "False":
-                    instancePrint(["PROCESS BROKEN"])
-                    break
-                dt_list = prices["dt_list"]
-                dt_list = dt_list[-max_ln:]
-                del prices["dt_list"]
-                del prices["state"]
-                symbols = list(prices.keys())
-                iteration = 0
-                current_symbols = []
-                current_prices = []
-                if len(symbols)%(dimension**2) != 0:
-                    for i in range(dimension**2 - len(symbols)%(dimension**2)):
-                        symbols.append('temp_symbol'+str(i))
-                        prices['temp_symbol'+str(i)] = [0 for item in dt_list]
-                for symbol in symbols:
-                    ttemp = time.time()
-                    iteration+=1
-                    y = prices[symbol]
-                    y = y[-max_ln:]
-                    y = ma(y,10)
-                    x = []
-                    for i in range(len(y)):
-                        x.append(i)
-                    current_symbols.append(symbol)
-                    current_prices.append(y)
-                    if iteration == dimension**2:
-                        ttemp = time.time()
-                        name = ""
-                        for symb in current_symbols:
-                            if name == "":
-                                name += symb
-                            else:
-                                name += ","+symb
-                        
-                        file_name = "zODworkspace//save//"+name+".jpg"
-                        #instancePrint([name])
-                        y_dict = {}
-                        for i in range(len(current_prices)):
-                            y_dict[str(i+1)] = current_prices[i]
-                        t = time.time()
-                        fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                        #instancePrint([time.time() - t])
-                        t = time.time()
-                        fig.write_image(file_name)
-                        #instancePrint(["sub", time.time() - t])
-                        ttemp = time.time()
-                        if AI_flag:
-                            #data
-                            dataset = LoadImages(source, img_size=imgsz, stride=stride)
-                            # prediction 
-                            if device.type != 'cpu':
-                                model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
-                            old_img_w = old_img_h = imgsz
-                            old_img_b = 1
-                            t0 = time.time()
-                            predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
-                            ttemp = time.time()
-                            #instancePrint(["PREDICTION:",ttemp - t0])
-                            results, points = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
-                            ttemp = time.time()
-                            for key in points.keys():
-                                calibration[key] = points[key]
-                            with open('zODworkspace//watchlist.txt', 'r') as f:
-                                watchlist = json.loads(f.read())
-                            with open('zODworkspace//total_watchlist.txt', 'r') as f:
-                                total_watchlist = json.loads(f.read())
-                            PD_intervals = [5,20]
-                            for key in results.keys():
-                                for interval in PD_intervals:
-                                    watchlist[key+"_"+str(interval)] = results[key]
-                                    total_watchlist[key+"_"+str(interval)] = results[key]
+            with open("zSaves//zSharedSaves.txt", "r") as f:
+                save = json.loads(f.read())
+            triggerFlag = False
+            if save["zOD"] == 10:
+                triggerFlag = True
+                save["zOD"] = 0
+            with open("zSaves//zSharedSaves.txt", 'w') as f:
+                    json.dump(save, f)
+            if triggerFlag:
+                triggerFlag = False
 
-                            sorted_keys = sorted(list(watchlist.keys()))
-                            sorted_watchlist = {}
-                            for key in sorted_keys:
-                                sorted_watchlist[key] = watchlist[key]
-                            watchlist = sorted_watchlist
-                            with open('zODworkspace//watchlist.txt', 'w') as f:
-                                json.dump(watchlist, f)
-                            with open('zODworkspace//total_watchlist.txt', 'w') as f:
-                                json.dump(total_watchlist, f)
-                            ttemp = time.time()
-                            
-                        os.remove(file_name)
-                        iteration = 0
-                        current_symbols = []
-                        current_prices = []
+                instancePrint(["--------------------"])
+                instancePrint(["STARTING NEW ITERATION"])
+                instancePrint(["TIME",time.time()-start_time,time.time(),start_time])
+                instancePrint(["--------------------"])
+                start_time = time.time()
+                dt,now,day = current_time("America/New_York")
+                if plot_flag:
+                    prices = read_json_file('zODworkspace//prices.txt',prices)
+                    state = prices["state"]
+                    if state["continue"] == "False":
+                        instancePrint(["PROCESS BROKEN"])
+                        break
+                    dt_list = prices["dt_list"]
+                    dt_list = dt_list[-max_ln:]
+                    del prices["dt_list"]
+                    del prices["state"]
+                    symbols = list(prices.keys())
+                    iteration = 0
+                    current_symbols = []
+                    current_prices = []
+                    if len(symbols)%(dimension**2) != 0:
+                        for i in range(dimension**2 - len(symbols)%(dimension**2)):
+                            symbols.append('temp_symbol'+str(i))
+                            prices['temp_symbol'+str(i)] = [0 for item in dt_list]
+                    for symbol in symbols:
                         ttemp = time.time()
+                        iteration+=1
+                        y = prices[symbol]
+                        y = y[-max_ln:]
+                        y = ma(y,10)
+                        x = []
+                        for i in range(len(y)):
+                            x.append(i)
+                        current_symbols.append(symbol)
+                        current_prices.append(y)
+                        if iteration == dimension**2:
+                            ttemp = time.time()
+                            name = ""
+                            for symb in current_symbols:
+                                if name == "":
+                                    name += symb
+                                else:
+                                    name += ","+symb
+                            
+                            file_name = "zODworkspace//save//"+name+".jpg"
+                            #instancePrint([name])
+                            y_dict = {}
+                            for i in range(len(current_prices)):
+                                y_dict[str(i+1)] = current_prices[i]
+                            t = time.time()
+                            fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
+                            #instancePrint([time.time() - t])
+                            t = time.time()
+                            fig.write_image(file_name)
+                            #instancePrint(["sub", time.time() - t])
+                            ttemp = time.time()
+                            if AI_flag:
+                                #data
+                                dataset = LoadImages(source, img_size=imgsz, stride=stride)
+                                # prediction 
+                                if device.type != 'cpu':
+                                    model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
+                                old_img_w = old_img_h = imgsz
+                                old_img_b = 1
+                                t0 = time.time()
+                                predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, classes, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
+                                ttemp = time.time()
+                                #instancePrint(["PREDICTION:",ttemp - t0])
+                                results, points = extract_hs(current_symbols,current_prices,dt_list,name,dimension)
+                                ttemp = time.time()
+                                for key in points.keys():
+                                    calibration[key] = points[key]
+                                with open('zODworkspace//watchlist.txt', 'r') as f:
+                                    watchlist = json.loads(f.read())
+                                with open('zODworkspace//total_watchlist.txt', 'r') as f:
+                                    total_watchlist = json.loads(f.read())
+                                PD_intervals = [5,20]
+                                for key in results.keys():
+                                    for interval in PD_intervals:
+                                        watchlist[key+"_"+str(interval)] = results[key]
+                                        total_watchlist[key+"_"+str(interval)] = results[key]
+
+                                sorted_keys = sorted(list(watchlist.keys()))
+                                sorted_watchlist = {}
+                                for key in sorted_keys:
+                                    sorted_watchlist[key] = watchlist[key]
+                                watchlist = sorted_watchlist
+                                with open('zODworkspace//watchlist.txt', 'w') as f:
+                                    json.dump(watchlist, f)
+                                with open('zODworkspace//total_watchlist.txt', 'w') as f:
+                                    json.dump(total_watchlist, f)
+                                ttemp = time.time()
+                                
+                            os.remove(file_name)
+                            iteration = 0
+                            current_symbols = []
+                            current_prices = []
+                            ttemp = time.time()
+            else:
+                time.sleep(2)
+            """
             if time.time()-start_time < 45:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 time.sleep(int(45-(time.time()-start_time)))
+            """

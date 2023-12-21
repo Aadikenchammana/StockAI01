@@ -1160,9 +1160,13 @@ def PD():
             for jpg_file in jpg_files:
                 
                 if jpg_file not in result_jpg_list:
-                        os.remove(jpg_file)
-
-            
+                        os.remove(jpg_file)\
+                        
+            with open("zSaves//zSharedSaves.txt", "r") as f:
+                save = json.loads(f.read())
+            save["zPD"] = save["zPD"]+1
+            with open("zSaves//zSharedSaves.txt", 'w') as f:
+                    json.dump(save, f)
             if flag:
                 instancePrint(["TIME TAKEN:",(time.time()-start_time)])
                 if time.time()-start_time < 10:

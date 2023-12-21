@@ -139,51 +139,63 @@ def DC():
     time.sleep(15)
     counter = 0
     while flag:
-        counter +=1
-        if counter == 10:
-            counter = 0
-            os.system('clear')
-        dt,now,day = current_time("America/New_York")
-        with open('zODworkspace//prices.txt', 'r') as f:
-            prices = json.loads(f.read())
-        msg = ""
-        for symbol in symbols:
-            msg+= ","+symbol
-        msg = msg[1:]
-        responses = access_api('price_list:'+msg).split(",")
-        prices["state"] = state
-        for response in responses:
-            response = response.split(":")
-            symbol = response[0]
-            if symbol == "dt_list":
-                lst = prices[symbol]
-                dt = response[1]
-                instancePrint(["CURRENT DT:",dt])
-                lst.append(dt)
-                if len(lst) > max_ln:
-                    for i in range(len(lst)-max_ln):
-                        lst.pop(0)
-                prices[symbol] = lst
-            elif symbol == "states":
-                resp = response[1].split("-")
-                for i in range(len(resp)):
-                    if i%2 == 1:
-                        state[resp[i-1]] = resp[i]
-                prices["state"] = state
-            else:
-                lst = prices[symbol]
-                bid,ask,volume = float(response[2]),float(response[4]),float(response[6])
-                price = (bid+ask)/2
-                lst.append(price)
-                if len(lst) > max_ln:
-                    for i in range(len(lst)-max_ln):
-                        lst.pop(0)
-                prices[symbol] = lst
-        ttemp = time.time()
-        with open('zODworkspace//prices.txt', 'w') as f:
-                json.dump(prices, f)
-        instancePrint(["UPLOADAGE: ",time.time() - ttemp])
-        if state["continue"] == "False":
-            instancePrint(["PROCESS BROKE"])
-            break
-        time.sleep(4)
+        with open("zSaves//zSharedSaves.txt", "r") as f:
+            save = json.loads(f.read())
+        triggerFlag = False
+        if save["zPD"] == 2:
+            triggerFlag = True
+            save["zOD"] = save["zOD"] + 1
+            save["zPD"] = 0
+        with open("zSaves//zSharedSaves.txt", 'w') as f:
+                json.dump(save, f)
+        if triggerFlag:
+            triggerFlag = False
+            counter +=1
+            if counter == 10:
+                counter = 0
+                os.system('clear')
+            dt,now,day = current_time("America/New_York")
+            with open('zODworkspace//prices.txt', 'r') as f:
+                prices = json.loads(f.read())
+            msg = ""
+            for symbol in symbols:
+                msg+= ","+symbol
+            msg = msg[1:]
+            responses = access_api('price_list:'+msg).split(",")
+            prices["state"] = state
+            for response in responses:
+                response = response.split(":")
+                symbol = response[0]
+                if symbol == "dt_list":
+                    lst = prices[symbol]
+                    dt = response[1]
+                    instancePrint(["CURRENT DT:",dt])
+                    lst.append(dt)
+                    if len(lst) > max_ln:
+                        for i in range(len(lst)-max_ln):
+                            lst.pop(0)
+                    prices[symbol] = lst
+                elif symbol == "states":
+                    resp = response[1].split("-")
+                    for i in range(len(resp)):
+                        if i%2 == 1:
+                            state[resp[i-1]] = resp[i]
+                    prices["state"] = state
+                else:
+                    lst = prices[symbol]
+                    bid,ask,volume = float(response[2]),float(response[4]),float(response[6])
+                    price = (bid+ask)/2
+                    lst.append(price)
+                    if len(lst) > max_ln:
+                        for i in range(len(lst)-max_ln):
+                            lst.pop(0)
+                    prices[symbol] = lst
+            ttemp = time.time()
+            with open('zODworkspace//prices.txt', 'w') as f:
+                    json.dump(prices, f)
+            instancePrint(["UPLOADAGE: ",time.time() - ttemp])
+            if state["continue"] == "False":
+                instancePrint(["PROCESS BROKE"])
+                break
+        else:
+            time.sleep(2)
