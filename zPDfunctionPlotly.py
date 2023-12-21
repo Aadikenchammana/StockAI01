@@ -820,6 +820,7 @@ def PD():
         clear_files("zPDworkspace/results","jpg")
         clear_files("zPDworkspace/save","jpg")
         clear_files("zPDworkspace/trends","jpg")
+        clear_files("zPDworkspace/save","jpg")
 
         clear_files("zPDworkspace/current","png")
         clear_files("zPDworkspace/false","png")
@@ -834,7 +835,7 @@ def PD():
         clear_files("zPDworkspace/found/big","txt")
         clear_files("zPDworkspace/found/zregression","txt")
         clear_files("zPDworkspace/results","txt")
-        clear_files("zPDworkspace/save","jpg")
+        
         clear_files("zPDworkspace/save","txt")
         start_time = time.time()
         watchlist = {}

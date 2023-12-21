@@ -157,39 +157,40 @@ def DC():
             dt,now,day = current_time("America/New_York")
             with open('zODworkspace//prices.txt', 'r') as f:
                 prices = json.loads(f.read())
-            msg = ""
-            for symbol in symbols:
-                msg+= ","+symbol
-            msg = msg[1:]
-            responses = access_api('price_list:'+msg).split(",")
-            prices["state"] = state
-            for response in responses:
-                response = response.split(":")
-                symbol = response[0]
-                if symbol == "dt_list":
-                    lst = prices[symbol]
-                    dt = response[1]
-                    instancePrint(["CURRENT DT:",dt])
-                    lst.append(dt)
-                    if len(lst) > max_ln:
-                        for i in range(len(lst)-max_ln):
-                            lst.pop(0)
-                    prices[symbol] = lst
-                elif symbol == "states":
-                    resp = response[1].split("-")
-                    for i in range(len(resp)):
-                        if i%2 == 1:
-                            state[resp[i-1]] = resp[i]
-                    prices["state"] = state
-                else:
-                    lst = prices[symbol]
-                    bid,ask,volume = float(response[2]),float(response[4]),float(response[6])
-                    price = (bid+ask)/2
-                    lst.append(price)
-                    if len(lst) > max_ln:
-                        for i in range(len(lst)-max_ln):
-                            lst.pop(0)
-                    prices[symbol] = lst
+            for repeat in range(2):
+                msg = ""
+                for symbol in symbols:
+                    msg+= ","+symbol
+                msg = msg[1:]
+                responses = access_api('price_list:'+msg).split(",")
+                prices["state"] = state
+                for response in responses:
+                    response = response.split(":")
+                    symbol = response[0]
+                    if symbol == "dt_list":
+                        lst = prices[symbol]
+                        dt = response[1]
+                        instancePrint(["CURRENT DT:",dt])
+                        lst.append(dt)
+                        if len(lst) > max_ln:
+                            for i in range(len(lst)-max_ln):
+                                lst.pop(0)
+                        prices[symbol] = lst
+                    elif symbol == "states":
+                        resp = response[1].split("-")
+                        for i in range(len(resp)):
+                            if i%2 == 1:
+                                state[resp[i-1]] = resp[i]
+                        prices["state"] = state
+                    else:
+                        lst = prices[symbol]
+                        bid,ask,volume = float(response[2]),float(response[4]),float(response[6])
+                        price = (bid+ask)/2
+                        lst.append(price)
+                        if len(lst) > max_ln:
+                            for i in range(len(lst)-max_ln):
+                                lst.pop(0)
+                        prices[symbol] = lst
             ttemp = time.time()
             with open('zODworkspace//prices.txt', 'w') as f:
                     json.dump(prices, f)
