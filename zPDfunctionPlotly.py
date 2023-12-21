@@ -955,10 +955,10 @@ def PD():
                                 y_dict[str(i+1)] = current_ma_prices[i]
                             t = time.time()
                             fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-                            instancePrint([time.time() - t])
+                            #instancePrint([time.time() - t])
                             t = time.time()
                             fig.write_image(file_name)
-                            instancePrint(["sub", time.time() - t])
+                            #instancePrint(["sub", time.time() - t])
                             ttemp = time.time()
                             if AI_flag:
                                 #data
@@ -971,11 +971,11 @@ def PD():
                                 t0 = time.time()
                                 predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project, name, exist_ok,old_img_b,old_img_w,old_img_h,augment)
                                 ttemp = time.time()
-                                instancePrint(["PREDICTION:",ttemp - t0])
+                                #instancePrint(["PREDICTION:",ttemp - t0])
                             if True:
                                 ttemp = time.time()
                                 x_dict,y_dict,class_dict = extract_hs(name,current_symbols,current_prices,current_ma_prices,dt_list,dimension)
-                                instancePrint(["EXTRACT",time.time() - ttemp])
+                                #instancePrint(["EXTRACT",time.time() - ttemp])
                                 ttemp = time.time()
                                 current_keys = []
                                 for key in x_dict.keys():
@@ -1059,7 +1059,7 @@ def PD():
                                                         x_trend_lst = []
                                                         for i in range(len(y_trend_lst)):
                                                             x_trend_lst.append(i)
-                                                        print("checking trend")
+                                                        #print("checking trend")
                                                         trend_height, trend_ln, trend_flag = check_trend(symbol_name,x_trend_lst,y_trend_lst,dt_list,x,y,unshortened_x,unshortened_y,max_detection_len,max_trend_len,source, weights, view_img, save_txt, imgsz, trace,device,half,model,classify,webcam,save_dir,names,save_img,colors,x_size,y_size,my_dpi,stride,dimension,fig, conf_thres, iou_thres, save_conf, nosave, optClasses, agnostic_nms, update, project,exist_ok, augment)
                                                         if trend_flag:
                                                             #instancePrint(["trend verified"])
@@ -1098,7 +1098,7 @@ def PD():
                                         else:
                                             hi1 = 2
                                             #instancePrint(["Not enough points"])
-                                instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
+                                #instancePrint(["CALCULATION",time.time() - ttemp,(time.time() - ttemp)/len(current_keys)])
                                 ttemp = time.time()
                             os.remove(file_name)
                             plt.close('all')

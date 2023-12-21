@@ -186,4 +186,4 @@ def DC():
         if state["continue"] == "False":
             instancePrint(["PROCESS BROKE"])
             break
-        time.sleep(2)
+        time.sleep(4)
