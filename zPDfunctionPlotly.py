@@ -4,6 +4,23 @@
 #------------------------------------------------------------------------
 # A I   P R E P 
 #------------------------------------------------------------------------
+def clear_files(directory,typ):
+    import glob
+    import os
+    # Get all png files in the directory
+    print("CLEARING:")
+    if typ == "png":
+        png_files = glob.glob(os.path.join(directory, '*.png'))
+    elif typ == "jpg":
+        png_files = glob.glob(os.path.join(directory, '*.jpg'))
+    else:
+        png_files = glob.glob(os.path.join(directory, '*.txt'))
+    
+    # Iterate over each png file
+    for png_file in png_files:
+        if (os.path.exists(png_file)):
+            os.remove(png_file)
+    instancePrint(["DIRECTORY CLEARED:",directory])
 def printDir():
     import os
     current_directory = os.getcwd()
@@ -495,7 +512,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
+            #instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -584,10 +601,10 @@ def check_trend(symbol,x,prices,dt_list,points_x,points_y,usx,usy,detection_ln,t
         y_dict[str(i+1)] = current_prices[i]
     t = time.time()
     fig.for_each_trace(lambda trace: trace.update(y=y_dict[trace.name]))
-    instancePrint([time.time() - t])
+    #instancePrint([time.time() - t])
     t = time.time()
     fig.write_image(file_name)
-    instancePrint(["sub", time.time() - t])
+    #instancePrint(["sub", time.time() - t])
     ttemp = time.time()
         #data
     dataset = LoadImages(source, img_size=imgsz, stride=stride)

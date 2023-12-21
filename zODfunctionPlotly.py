@@ -20,7 +20,7 @@ def instancePrint(lst):
         string+= " "+str(item)
     string = string[1:]
     print("zOD:",string)
-def clear_png_files(directory,typ):
+def clear_files(directory,typ):
     import glob
     import os
     # Get all png files in the directory
@@ -314,7 +314,7 @@ def predicting(dataset,source, weights, view_img, save_txt, imgsz, trace,device,
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
+            #instancePrint([f'{s}{(1E3 * (t2 - t1)):.1f}'])
 
             # Stream results
             if view_img:
@@ -472,11 +472,11 @@ def OD():
             json.dump({}, f)
         with open('zODworkspace//total_watchlist.txt', 'w') as f:
             json.dump({}, f)
-        clear_png_files("zODworkspace//save","png")
-        clear_png_files("zODworkspace//results","png") 
-        clear_png_files("zODworkspace//save","jpg")
-        clear_png_files("zODworkspace//results","jpg") 
-        clear_png_files("zODworkspace//results","txt")
+        clear_files("zODworkspace//save","png")
+        clear_files("zODworkspace//results","png") 
+        clear_files("zODworkspace//save","jpg")
+        clear_files("zODworkspace//results","jpg") 
+        clear_files("zODworkspace//results","txt")
         start_time = time.time()
         while True:
             instancePrint(["--------------------"])
